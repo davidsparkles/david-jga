@@ -1,17 +1,20 @@
 import React from "react";
 import { RouteChildrenProps } from "react-router-dom";
+import { useData } from "../api/useData";
 import Challenges from "./Challenges";
-import Header from "./Header";
+import GameHeader from "./GameHeader";
 
 export default function Game(props: RouteChildrenProps<{ gameId: string }>): JSX.Element {
   const gameId = props.match?.params.gameId;
+  const { data, error } = useData(gameId);
 
-  if (gameId == null) return <>GameId Not Found</>;
+  if (error) return <>Error: {error}</>;
+  if (data == null) return <>No Data Found</>;
 
   return (
     <div className="Game">
-        <Header gameId={gameId} />
-        <Challenges />
+        <GameHeader data={data} />
+        <Challenges challenges={data.challenges} />
     </div>
   );
 }

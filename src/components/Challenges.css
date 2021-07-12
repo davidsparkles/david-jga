@@ -15,7 +15,7 @@
 .challengeHeader {
   display: grid;
   grid-template-columns: 75% 25%;
-  padding: 2px 4px 12px 4px;
+  padding: 2px 4px 18px 4px;
 }
 
 .challengeTitle {
