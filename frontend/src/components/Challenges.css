@@ -12,6 +12,12 @@
   padding: 6px 6px;
 }
 
+.challengeBox:hover {
+  border-width: 2px;
+  border-color: black;
+  padding: 5px 5px;
+}
+
 .challengeHeader {
   display: grid;
   grid-template-columns: 75% 25%;
@@ -30,4 +36,5 @@
 .challengeDescription {
   color: grey;
   text-align: left;
+  overflow: hidden;
 }
