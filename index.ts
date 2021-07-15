@@ -10,7 +10,7 @@ import HttpStatus from "http-status";
 const app = new Koa();
 
 const static_pages = new Koa();
-static_pages.use(serve(__dirname + "/../frontend/build")); //serve the build directory
+static_pages.use(serve(__dirname + "/frontend/build")); //serve the build directory
 app.use(mount("/", static_pages));
 
 const PORT = process.env.PORT || 3010;

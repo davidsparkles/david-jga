@@ -1,14 +1,35 @@
 {
-    "name": "david-jga",
-    "version": "0.1.0",
-    "engines": {
-      "node": "14.x"
-    },
-    "scripts": {
-      "start": "npm run start-be",
-      "start-be": "cd backend && npm start",
-      "start-fe": "cd frontend && npm start",
-      "build": "cd frontend && npm run build"
-    }
+  "name": "david-jga",
+  "version": "0.1.0",
+  "engines": {
+    "node": "14.x"
+  },
+  "dependencies": {
+    "@types/node": "^12.0.0",
+    "http-status": "^1.5.0",
+    "koa": "^2.13.1",
+    "koa-bodyparser": "^4.3.0",
+    "koa-cors": "^0.0.16",
+    "koa-logger": "^3.2.1",
+    "koa-mount": "^4.0.0",
+    "koa-router": "^10.0.0",
+    "koa-static": "^5.0.0",
+    "ts-node": "^10.1.0",
+    "typescript": "^4.1.2"
+  },
+  "scripts": {
+    "start": "ts-node index.ts",
+    "start-fe": "cd frontend && npm start",
+    "build-fe": "cd frontend && npm run build"
+  },
+  "devDependencies": {
+    "@types/http-status": "^1.1.2",
+    "@types/koa": "^2.13.4",
+    "@types/koa-bodyparser": "^4.3.2",
+    "@types/koa-cors": "^0.0.1",
+    "@types/koa-logger": "^3.1.1",
+    "@types/koa-mount": "^4.0.0",
+    "@types/koa-router": "^7.4.4",
+    "@types/koa-static": "^4.0.2"
   }
-  
+}
