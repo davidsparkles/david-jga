@@ -5,13 +5,20 @@ import Logger = require("koa-logger");
 import mount = require("koa-mount");
 import Router = require("koa-router");
 import serve = require("koa-static");
-import HttpStatus from "http-status";
+import HttpStatus = require("http-status");
 
 const app = new Koa();
 
+const REACT_ROUTER_PATHS = ["/game"];
+
 const static_pages = new Koa();
 static_pages.use(serve(__dirname + "/frontend/build")); //serve the build directory
-app.use(mount("/", static_pages));
+app.use(async (ctx, next) => {
+  if (REACT_ROUTER_PATHS.find(path => ctx.request.path.startsWith(path)) != null) {
+    ctx.request.path = '/';
+  }
+  await next();
+}).use(mount("/", static_pages));
 
 const PORT = process.env.PORT || 3010;
 
@@ -21,10 +28,9 @@ app.use(cors());
 
 const router = new Router();
 
-router.get("/book",async (ctx,next)=>{
-  const books = ["Speaking javascript", "Fluent Python", "Pro Python", "The Go programming language"];
+router.get("/api/game/:gameId", async (ctx, next)=>{
   ctx.status = HttpStatus.OK;
-  ctx.body = books;
+  ctx.body = ctx.params.gameId;
   await next();
 });
 
