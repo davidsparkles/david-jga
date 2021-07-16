@@ -18,6 +18,14 @@
   padding: 5px 5px;
 }
 
+.challengeBox.closed {
+  background-color: lightgreen;
+}
+
+.challengeBox.hidden {
+  background-color: lightgray;
+}
+
 .challengeHeader {
   display: grid;
   grid-template-columns: 75% 25%;
