@@ -23,7 +23,7 @@
   "scripts": {
     "start": "ts-node index.ts",
     "start-fe": "cd frontend && npm start",
-    "build-fe": "cd frontend && npm run build"
+    "build": "cd frontend && yarn install && yarn run build"
   },
   "devDependencies": {
     "@types/http-status": "^1.1.2",
