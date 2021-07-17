@@ -2,7 +2,7 @@
   display: grid;
   grid-auto-flow: row;
   height: 100%;
-  margin: 24px 12px;
+  margin: 24px 4px;
 }
 
 .challengeBox {
