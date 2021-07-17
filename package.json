@@ -23,6 +23,7 @@
   "scripts": {
     "start": "ts-node index.ts",
     "dev-server": "ts-node-dev --respawn index.ts",
+    "build": "cd frontend && yarn install && yarn build",
     "dev": "tmux new-session 'yarn dev-server' \\; split-window -v 'cd frontend && yarn start' \\;"
   },
   "devDependencies": {
