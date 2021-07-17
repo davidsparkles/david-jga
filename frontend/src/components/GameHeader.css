@@ -36,7 +36,7 @@
   border: 1px solid gray;
   border-radius: 4px;
   height: 100%;
-  width: clamp(76px, 80%, 156px);
+  width: clamp(66px, 70%, 136px);
 }
 
 .gameProgressCurrent {

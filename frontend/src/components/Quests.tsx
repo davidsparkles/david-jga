@@ -1,27 +1,34 @@
-import React from "react";
+import React, { useState } from "react";
 import { Quest } from "../api/useData";
 import "./Quests.css";
 
 export default function Quests(props: { quests: Quest[] }): JSX.Element {
+  const [filterList, setFilterList] = useState<boolean>(false);
+
   return (
     <div className="questList">
-      {props.quests.map((quest, index) => (
-        <div key={index} className={`questBox ${quest.state}`}>
-          <div className="questHeader">
-            <div className="questTitle">{quest.title ?? "???"}</div>
-            <div className="questPoints">
-              {
-                quest.state === "hidden" ? quest.maxPoints : `${quest.reachedPoints} / ${quest.maxPoints}`
-              }
+      <div className="questFilter">
+        <input type="checkbox" checked={filterList} onChange={(evt) => setFilterList(evt.target.checked)} />Erledigte Quests verbergen
+      </div>
+      {props.quests
+        .filter(({ state }) => filterList === true ? state !== "closed" : true)
+        .map((quest, index) => (
+          <div key={index} className={`questBox ${quest.state}`}>
+            <div className="questHeader">
+              <div className="questTitle">{quest.title ?? "🔒 ???"}</div>
+              <div className="questPoints">
+                {
+                  quest.state === "hidden" ? quest.maxXp : `${quest.reachedXp} / ${quest.maxXp}`
+                }
+              </div>
             </div>
+            {
+              quest.state !== "hidden" && <div className="questDescription">{formatDescription(quest.description ?? "???")}</div>
+            }
+            {
+              quest.state === "hidden" && <div className="questDescription">Ab Level {quest.minLevel}</div>
+            }
           </div>
-          {
-            quest.state !== "hidden" && <div className="questDescription">{formatDescription(quest.description ?? "???")}</div>
-          }
-          {
-            quest.state === "hidden" && <div className="questDescription">Mindestens {quest.minLevel} abgeschlossene Quests</div>
-          }
-        </div>
       ))}
     </div>
   );

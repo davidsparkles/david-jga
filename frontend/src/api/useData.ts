@@ -5,8 +5,8 @@ export type questState = "open" | "closed" | "hidden";
 export interface Quest {
   title?: string;
   description?: string;
-  maxPoints: number;
-  reachedPoints: number;
+  maxXp: number;
+  reachedXp: number;
   minLevel: number;
   state: questState;
 }

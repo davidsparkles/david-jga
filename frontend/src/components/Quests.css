@@ -2,7 +2,12 @@
   display: grid;
   grid-auto-flow: row;
   height: 100%;
-  margin: 24px 4px;
+  margin: 12px 4px 24px 4px;
+}
+
+.questFilter {
+  text-align: right;
+  font-size: 0.8em;
 }
 
 .questBox {
