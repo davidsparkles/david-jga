@@ -1,16 +1,30 @@
 .gameHeader {
   font-size: 2em;
-  padding: 12px 42px;
+  padding: 12px 21px;
   border-bottom: 3px black solid;
   display: grid;
-  grid-template-columns: 70% 30%;
+  grid-template-columns: 60% 40%;
+  grid-template-rows: 60% 40%;
+  grid-template-areas: 
+    "title points"
+    "title quests";
 }
 
 .gameHeaderTitle {
   text-align: left;
+  grid-area: title;
 }
 
 .gameHeaderPoints {
+  font-size: 0.7em;
   text-align: right;
   color: grey;
+  grid-area: points;
+}
+
+.gameHeaderQuests {
+  font-size: 0.6em;
+  text-align: right;
+  color: grey;
+  grid-area: quests;
 }

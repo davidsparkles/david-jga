@@ -43,6 +43,7 @@ router.get("/api/game/:gameId", async (ctx, next)=>{
       SELECT
         game.id AS "gameId",
         game.title AS "gameTitle",
+        challenges.count AS "totalChallenges",
         closed.count AS "totalClosed",
         COALESCE((
           SELECT sum(points) FROM exec_challenge WHERE game_id = game.id
@@ -69,7 +70,8 @@ router.get("/api/game/:gameId", async (ctx, next)=>{
           ) sub
         ), '[]'::json) AS challenges
       FROM game,
-        LATERAL (SELECT COALESCE((SELECT count(*) FROM exec_challenge WHERE game_id = game.id), 0) count) closed
+        LATERAL (SELECT COALESCE((SELECT count(*) FROM exec_challenge WHERE game_id = game.id), 0) count) closed,
+        LATERAL (SELECT COALESCE((SELECT count(*) FROM challenge), 0) count) challenges
       WHERE game.id = $1
     ) d;
   `, [gameId]);

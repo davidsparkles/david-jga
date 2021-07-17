@@ -22,7 +22,8 @@
   },
   "scripts": {
     "start": "ts-node index.ts",
-    "dev": "tmux new-session 'yarn start' \\; split-window -v 'cd frontend && yarn start' \\;"
+    "dev-server": "ts-node-dev --respawn index.ts",
+    "dev": "tmux new-session 'yarn dev-server' \\; split-window -v 'cd frontend && yarn start' \\;"
   },
   "devDependencies": {
     "@types/http-status": "^1.1.2",
@@ -33,6 +34,7 @@
     "@types/koa-mount": "^4.0.0",
     "@types/koa-router": "^7.4.4",
     "@types/koa-static": "^4.0.2",
-    "@types/pg": "^8.6.1"
+    "@types/pg": "^8.6.1",
+    "ts-node-dev": "^1.1.8"
   }
 }

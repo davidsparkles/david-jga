@@ -15,9 +15,20 @@ export default function Challenges(props: { challenges: Challenge[] }): JSX.Elem
               }
             </div>
           </div>
-          <div className="challengeDescription">{challenge.description ?? "???"}</div>
+          {
+            challenge.state !== "hidden" && <div className="challengeDescription">{formatDescription(challenge.description ?? "???")}</div>
+          }
+          {
+            challenge.state === "hidden" && <div className="challengeDescription">Mindestens {challenge.minClosed} abgeschlossene Quests</div>
+          }
         </div>
       ))}
     </div>
   );
+}
+
+function formatDescription(description?: string): string {
+  if (description == null) return "???";
+  if (description.length < 100) return description;
+  return description.substring(0, 96) + " ...";
 }

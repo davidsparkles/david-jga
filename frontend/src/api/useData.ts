@@ -14,6 +14,8 @@ export interface Challenge {
 export interface Data {
   gameId: number;
   gameTitle: string;
+  totalChallenges: number;
+  totalClosed: number;
   totalReachedPoints: number;
   totalMaxPoints: number;
   challenges: Challenge[];
