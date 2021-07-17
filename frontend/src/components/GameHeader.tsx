@@ -5,7 +5,7 @@ import "./GameHeader.css";
 export default function GameHeader(props: { data: Data }): JSX.Element {
   return (
     <div className="gameHeader">
-      <div className="gameHeaderTitle">{props.data.gameTitle}</div>
+      <div className="gameHeaderTitle">Quest Master</div>
       <div className="gameHeaderLevel">
         Level {props.data.currentLevel} / {props.data.maxLevel}
       </div>

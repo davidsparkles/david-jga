@@ -1,5 +1,4 @@
 .gameHeader {
-  font-size: 2em;
   padding: 12px 21px;
   border-bottom: 3px black solid;
   display: grid;
@@ -11,12 +10,13 @@
 }
 
 .gameHeaderTitle {
+  font-size: 1.4em;
   text-align: left;
   grid-area: title;
 }
 
 .gameHeaderLevel {
-  font-size: 0.7em;
+  font-size: 1em;
   text-align: right;
   color: grey;
   grid-area: level;
