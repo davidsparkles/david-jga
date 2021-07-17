@@ -4,6 +4,7 @@
   display: grid;
   grid-template-columns: 50% 50%;
   grid-template-rows: 60% 40%;
+  grid-row-gap: 8px;
   grid-template-areas: 
     "title level"
     "title progress";
@@ -25,7 +26,6 @@
 .gameProgressContainer {
   grid-area: progress;
   height: 20px;
-  width: clamp(100px, 100%, 200px);
   text-align: right;
   font-size: 15px;
 }

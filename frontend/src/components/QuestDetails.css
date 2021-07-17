@@ -1,0 +1,25 @@
+.questDetails {
+  margin: 12px 0;
+}
+
+.backArrowContainer {
+  padding: 0px 4px;
+  text-align: left;
+}
+
+.backArrow {
+  margin: 0px 0px 4px 0px;
+}
+
+.label {
+  text-align: left;
+  margin: 4px 4px;
+}
+
+.value {
+  background-color: rgb(245, 245, 245);
+  margin: 4px 8px 8px 8px;
+  border: 1px rgb(235, 234, 234) solid;
+  padding: 4px 8px;
+  text-align: left;
+}

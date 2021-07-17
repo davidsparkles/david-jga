@@ -1,9 +1,16 @@
 import React, { useState } from "react";
 import { Quest } from "../api/useData";
+import QuestDetails from "./QuestDetails";
 import "./Quests.css";
 
 export default function Quests(props: { quests: Quest[] }): JSX.Element {
   const [filterList, setFilterList] = useState<boolean>(false);
+  const [selectedQuest, setSelectedQuest] = useState<Quest | null>(null);
+
+  if (selectedQuest != null) {
+    console.log({ selectedQuest });
+    return <QuestDetails quest={selectedQuest} onBack={() => setSelectedQuest(null)} />;
+  }
 
   return (
     <div className="questList">
@@ -13,7 +20,7 @@ export default function Quests(props: { quests: Quest[] }): JSX.Element {
       {props.quests
         .filter(({ state }) => filterList === true ? state !== "closed" : true)
         .map((quest, index) => (
-          <div key={index} className={`questBox ${quest.state}`}>
+          <div key={index} className={`questBox ${quest.state}`} onClick={() => quest.state !== "hidden" && setSelectedQuest(quest)}>
             <div className="questHeader">
               <div className="questTitle">{quest.title ?? "🔒 ???"}</div>
               <div className="questPoints">

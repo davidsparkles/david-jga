@@ -23,8 +23,13 @@
   padding: 5px 5px;
 }
 
+.questBox.open {
+  cursor: pointer;
+}
+
 .questBox.closed {
   background-color: lightgreen;
+  cursor: pointer;
 }
 
 .questBox.hidden {
