@@ -1,0 +1,48 @@
+.challengeList {
+  display: grid;
+  grid-auto-flow: row;
+  height: 100%;
+  margin: 24px 12px;
+}
+
+.challengeBox {
+  border: 1px solid black;
+  border-radius: 3px;
+  margin: 8px 8px;
+  padding: 6px 6px;
+}
+
+.challengeBox:hover {
+  border-width: 2px;
+  border-color: black;
+  padding: 5px 5px;
+}
+
+.challengeBox.closed {
+  background-color: lightgreen;
+}
+
+.challengeBox.hidden {
+  background-color: lightgray;
+}
+
+.challengeHeader {
+  display: grid;
+  grid-template-columns: 75% 25%;
+  padding: 2px 4px 18px 4px;
+}
+
+.challengeTitle {
+  text-align: left;
+  font-size: 1.2em;
+}
+
+.challengePoints {
+  color: grey;
+}
+
+.challengeDescription {
+  color: grey;
+  text-align: left;
+  overflow: hidden;
+}
