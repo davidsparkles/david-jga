@@ -18,8 +18,8 @@ export default function Quests(props: { quests: Quest[] }): JSX.Element {
               <div className="questTitle">{quest.title ?? "🔒 ???"}</div>
               <div className="questPoints">
                 {
-                  quest.state === "hidden" ? quest.maxXp : `${quest.reachedXp} / ${quest.maxXp}`
-                }
+                  quest.state !== "closed" ? quest.maxXp : `${quest.reachedXp} / ${quest.maxXp}`
+                } XP
               </div>
             </div>
             {
