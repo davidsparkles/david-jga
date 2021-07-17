@@ -22,8 +22,7 @@
   },
   "scripts": {
     "start": "ts-node index.ts",
-    "start-fe": "cd frontend && npm start",
-    "build": "cd frontend && yarn install && yarn run build"
+    "dev": "tmux new-session 'yarn start' \\; split-window -v 'cd frontend && yarn start' \\;"
   },
   "devDependencies": {
     "@types/http-status": "^1.1.2",
