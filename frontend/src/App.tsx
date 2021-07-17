@@ -1,13 +1,13 @@
 import React from "react";
 import "./App.css";
-import ChallengeEditor from "./components/ChallengeEditor";
+import QuestEditor from "./components/QuestEditor";
 import Game from "./components/Game";
 
 function App() {
   return (
     <div className="App">
       <Game gameId={"1"} />
-      <ChallengeEditor />
+      <QuestEditor />
     </div>
   );
 }

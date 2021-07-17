@@ -6,10 +6,23 @@ export default function GameHeader(props: { data: Data }): JSX.Element {
   return (
     <div className="gameHeader">
       <div className="gameHeaderTitle">{props.data.gameTitle}</div>
-      <div className="gameHeaderPoints">
-        {props.data.totalReachedPoints} / {props.data.totalMaxPoints} Punkte
+      <div className="gameHeaderLevel">
+        Level {props.data.currentLevel} / {props.data.maxLevel}
       </div>
-      <div className="gameHeaderQuests">{props.data.totalClosed} / {props.data.totalChallenges} Quests</div>
+      <Progress current={props.data.xpWithinCurrentLevel} max={props.data.xpToNextLevel + props.data.xpWithinCurrentLevel} />
     </div>
   );
+}
+
+function Progress(props: { max: number; current: number }): JSX.Element {
+  const ratio = 100 * props.current / props.max;
+
+  return (
+    <div className="gameProgressContainer">
+      <div className="gameProgressBar">
+        <div style={{ width: `${ratio}%` }} className="gameProgressCurrent">{props.current}</div>
+      </div>
+      {props.max}
+    </div>
+  )
 }

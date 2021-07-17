@@ -43,35 +43,38 @@ router.get("/api/game/:gameId", async (ctx, next)=>{
       SELECT
         game.id AS "gameId",
         game.title AS "gameTitle",
-        challenges.count AS "totalChallenges",
-        closed.count AS "totalClosed",
+        game_level.current_level AS "currentLevel",
+        game_level.current_xp AS "currentXp",
         COALESCE((
-          SELECT sum(points) FROM exec_challenge WHERE game_id = game.id
-        ), 0) AS "totalReachedPoints",
+          SELECT required_xp - game_level.current_xp FROM level WHERE level.id = game_level.current_level + 1
+        ), 0) AS "xpToNextLevel",
         COALESCE((
-          SELECT sum(points) FROM challenge
-        ), 0) AS "totalMaxPoints",
+          SELECT game_level.current_xp - required_xp FROM level WHERE level.id = game_level.current_level
+        ), 0) AS "xpWithinCurrentLevel",
+        COALESCE((
+          SELECT max(id) FROM level
+        ), 0) AS "maxLevel",
         COALESCE((
           SELECT json_agg(row_to_json(sub)) FROM (
             SELECT
               id,
-              CASE WHEN min_closed <= closed.count THEN title ELSE NULL END AS title,
-              CASE WHEN min_closed <= closed.count THEN description ELSE NULL END AS description,
-              challenge.points AS "maxPoints",
-              COALESCE(ec.points, 0) AS "reachedPoints",
-              min_closed AS "minClosed",
+              disabled,
+              CASE WHEN min_level <= game_level.current_level THEN title ELSE NULL END AS title,
+              CASE WHEN min_level <= game_level.current_level THEN description ELSE NULL END AS description,
+              quest.xp AS "maxXp",
+              COALESCE(ec.xp, 0) AS "reachedXp",
+              min_level AS "minLevel",
               CASE
-                WHEN min_closed > closed.count THEN 'hidden'
+                WHEN min_level > game_level.current_level THEN 'hidden'
                 WHEN ec IS NOT NULL THEN 'closed'
                 ELSE 'open'
               END AS state
-            FROM challenge
-              LEFT JOIN exec_challenge ec ON ec.challenge_id = challenge.id AND ec.game_id = game.id
+            FROM quest
+              LEFT JOIN exec_quest ec ON ec.quest_id = quest.id AND ec.game_id = game.id
           ) sub
-        ), '[]'::json) AS challenges
+        ), '[]'::json) AS quests
       FROM game,
-        LATERAL (SELECT COALESCE((SELECT count(*) FROM exec_challenge WHERE game_id = game.id), 0) count) closed,
-        LATERAL (SELECT COALESCE((SELECT count(*) FROM challenge), 0) count) challenges
+        LATERAL (SELECT * FROM game_level WHERE game_id = game.id) game_level
       WHERE game.id = $1
     ) d;
   `, [gameId]);

@@ -1,6 +1,6 @@
 import React from "react";
 import { useData } from "../api/useData";
-import Challenges from "./Challenges";
+import Quests from "./Quests";
 import GameHeader from "./GameHeader";
 
 export default function Game(props: { gameId: string }): JSX.Element {
@@ -13,7 +13,7 @@ export default function Game(props: { gameId: string }): JSX.Element {
   return (
     <div className="Game">
         <GameHeader data={data} />
-        <Challenges challenges={data.challenges} />
+        <Quests quests={data.quests} />
     </div>
   );
 }

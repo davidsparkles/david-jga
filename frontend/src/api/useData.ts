@@ -1,24 +1,25 @@
 import { useEffect, useState } from "react";
 
-export type ChallengeState = "open" | "closed" | "hidden";
+export type questState = "open" | "closed" | "hidden";
 
-export interface Challenge {
+export interface Quest {
   title?: string;
   description?: string;
   maxPoints: number;
   reachedPoints: number;
-  minClosed: number;
-  state: ChallengeState;
+  minLevel: number;
+  state: questState;
 }
 
 export interface Data {
   gameId: number;
   gameTitle: string;
-  totalChallenges: number;
-  totalClosed: number;
-  totalReachedPoints: number;
-  totalMaxPoints: number;
-  challenges: Challenge[];
+  maxLevel: number;
+  currentLevel: number;
+  currentXp: number;
+  xpWithinCurrentLevel: number;
+  xpToNextLevel: number;
+  quests: Quest[];
 }
 
 async function getData(gameId: string): Promise<Data> {

@@ -3,11 +3,11 @@
   padding: 12px 21px;
   border-bottom: 3px black solid;
   display: grid;
-  grid-template-columns: 60% 40%;
+  grid-template-columns: 50% 50%;
   grid-template-rows: 60% 40%;
   grid-template-areas: 
-    "title points"
-    "title quests";
+    "title level"
+    "title progress";
 }
 
 .gameHeaderTitle {
@@ -15,16 +15,33 @@
   grid-area: title;
 }
 
-.gameHeaderPoints {
+.gameHeaderLevel {
   font-size: 0.7em;
   text-align: right;
   color: grey;
-  grid-area: points;
+  grid-area: level;
 }
 
-.gameHeaderQuests {
-  font-size: 0.6em;
+.gameProgressContainer {
+  grid-area: progress;
+  height: 20px;
+  width: clamp(100px, 100%, 200px);
   text-align: right;
-  color: grey;
-  grid-area: quests;
+  font-size: 15px;
+}
+
+.gameProgressBar {
+  margin-right: 4px;
+  display: inline-block;
+  border: 1px solid gray;
+  border-radius: 4px;
+  height: 100%;
+  width: clamp(76px, 80%, 156px);
+}
+
+.gameProgressCurrent {
+  background-color: lightskyblue;
+  height: 100%;
+  text-align: left;
+  padding: 0 5px;
 }
