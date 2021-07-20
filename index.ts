@@ -59,8 +59,8 @@ router.get("/api/game/:gameId", async (ctx, next)=>{
             SELECT
               id,
               disabled,
-              CASE WHEN min_level <= game_level.current_level THEN title ELSE NULL END AS title,
-              CASE WHEN min_level <= game_level.current_level THEN description ELSE NULL END AS description,
+              title,
+              description,
               quest.xp AS "maxXp",
               COALESCE(ec.xp, 0) AS "reachedXp",
               min_level AS "minLevel",

@@ -1,8 +1,9 @@
 import React from "react";
 import { Quest } from "../api/useData";
+import { Permission } from "../permission";
 import "./QuestDetails.css";
 
-export default function QuestDetails(props: { quest: Quest; onBack: () => void }): JSX.Element {
+export default function QuestDetails(props: { quest: Quest; onBack: () => void; permission: Permission }): JSX.Element {
   return <div className="questDetails">
     <div className="backArrowContainer">
       <button className="backArrow" onClick={() => props.onBack()}>🠔 Zurück</button>
@@ -29,7 +30,7 @@ export default function QuestDetails(props: { quest: Quest; onBack: () => void }
       Erreichte XP
     </div>
     <div className="value">
-      {props.quest.state != "closed" ? "-" : props.quest.reachedXp}
+      {props.quest.state !== "closed" ? "-" : props.quest.reachedXp}
     </div>
   </div>;
 }

@@ -36,3 +36,9 @@
     transform: rotate(360deg);
   }
 }
+
+.role {
+  text-align: left;
+  color: gray;
+  padding-left: 12px;
+}
