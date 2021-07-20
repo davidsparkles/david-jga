@@ -26,7 +26,11 @@ app.use(async (ctx, next) => {
 
 const PORT = process.env.PORT || 3000;
 
-app.use(BodyParser());
+app.use(BodyParser({
+  extendTypes: {
+    json: ["text/plain"]
+  }
+}));
 app.use(Logger());
 app.use(cors());
 
@@ -71,6 +75,7 @@ router.get("/api/game/:gameId", async (ctx, next)=>{
               END AS state
             FROM quest
               LEFT JOIN exec_quest ec ON ec.quest_id = quest.id AND ec.game_id = game.id
+            ORDER BY quest.min_level ASC
           ) sub
         ), '[]'::json) AS quests
       FROM game,
@@ -88,6 +93,20 @@ router.get("/api/game/:gameId", async (ctx, next)=>{
     ctx.body = `Game <${gameId}> Not Found`;
   }
   await next();
+});
+
+router.post("/api/quest", async (ctx, next) => {
+  const values = ctx.request.body as any;
+  console.log("Received values: ", JSON.stringify(values));
+
+  const client = await getClient();
+  if (values.id != null) {
+    await client.query(`UPDATE quest SET title=$1, description=$2, xp = $3 WHERE id = $4;`, [values.title, values.description, values.maxXp, values.id]);
+    console.log(`Updated quest ${values.id}`);
+  }
+
+  ctx.response.status = HttpStatus.CREATED;
+  next();
 });
 
 app.use(router.routes()).use(router.allowedMethods());

@@ -3,6 +3,7 @@ import { useCallback, useEffect, useState } from "react";
 export type questState = "open" | "closed" | "hidden";
 
 export interface Quest {
+  id: string;
   title?: string;
   description?: string;
   maxXp: number;

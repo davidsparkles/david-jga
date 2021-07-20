@@ -23,3 +23,16 @@
   padding: 4px 8px;
   text-align: left;
 }
+
+.value > textarea {
+  width: 100%;
+}
+
+.value > input {
+  width: 100%;
+}
+
+.saveContainer {
+  text-align: left;
+  padding-left: 12px;
+}
