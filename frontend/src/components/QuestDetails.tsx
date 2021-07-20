@@ -30,7 +30,7 @@ export default function QuestDetails(props: { quest: Quest; onBack: () => void; 
   const onSave = useCallback(async () => {
     await post({ id: quest.id, ...values });
     onBack();
-  }, [post, quest, values]);
+  }, [onBack, post, quest, values]);
 
   return <div className="questDetails">
     <div className="backArrowContainer">
