@@ -13,7 +13,7 @@ dotenv.config();
 
 const app = new Koa();
 
-const REACT_ROUTER_PATHS = ["/game"];
+const REACT_ROUTER_PATHS = ["/game", "/fitti", "/broiler"];
 
 const static_pages = new Koa();
 static_pages.use(serve(__dirname + "/frontend/build")); //serve the build directory
