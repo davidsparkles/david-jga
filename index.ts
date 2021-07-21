@@ -38,15 +38,12 @@ const router = new Router();
 
 
 
-router.get("/api/game/:gameId", async (ctx, next)=>{
-  const gameId = ctx.params.gameId;
+router.get("/api/data", async (ctx, next)=>{
 
   const client = await getClient();
   const res = await client.query(`
     SELECT row_to_json(d) AS data FROM (
       SELECT
-        game.id AS "gameId",
-        game.title AS "gameTitle",
         game_level.current_level AS "currentLevel",
         game_level.current_xp AS "currentXp",
         COALESCE((
@@ -65,24 +62,27 @@ router.get("/api/game/:gameId", async (ctx, next)=>{
               disabled,
               title,
               description,
-              quest.xp AS "maxXp",
-              COALESCE(ec.xp, 0) AS "reachedXp",
+              quest.max_xp AS "maxXp",
+              quest.xp,
               min_level AS "minLevel",
               CASE
-                WHEN min_level > game_level.current_level THEN 'hidden'
-                WHEN ec IS NOT NULL THEN 'closed'
-                ELSE 'open'
+              WHEN min_level > game_level.current_level THEN 'hidden'
+              WHEN quest.xp IS NOT NULL THEN 'closed'
+              ELSE 'open'
               END AS state
             FROM quest
-              LEFT JOIN exec_quest ec ON ec.quest_id = quest.id AND ec.game_id = game.id
-            ORDER BY quest.min_level ASC
-          ) sub
-        ), '[]'::json) AS quests
-      FROM game,
-        LATERAL (SELECT * FROM game_level WHERE game_id = game.id) game_level
-      WHERE game.id = $1
+            ORDER BY quest.min_level ASC, quest.title ASC
+            ) sub
+              ), '[]'::json) AS quests
+      FROM (
+        SELECT max(level.id) AS current_level, xps.sum AS current_xp
+        FROM level,
+          LATERAL (SELECT sum(COALESCE(xp, 0)) FROM quest) xps
+        WHERE xps.sum >= level.required_xp
+        GROUP BY xps.sum
+      ) game_level
     ) d;
-  `, [gameId]);
+  `, []);
 
   const data = res?.rows?.[0]?.data;
   if (data != null) {
@@ -90,7 +90,7 @@ router.get("/api/game/:gameId", async (ctx, next)=>{
     ctx.body = data;
   } else {
     ctx.status = HttpStatus.NOT_FOUND;
-    ctx.body = `Game <${gameId}> Not Found`;
+    ctx.body = `Data Not Found`;
   }
   await next();
 });
@@ -101,8 +101,17 @@ router.post("/api/quest", async (ctx, next) => {
 
   const client = await getClient();
   if (values.id != null) {
-    await client.query(`UPDATE quest SET title=$1, description=$2, xp = $3 WHERE id = $4;`, [values.title, values.description, values.maxXp, values.id]);
+    await client.query(
+      `UPDATE quest SET title=$2, description=$3, max_xp = $4, min_level = $5, xp = $6 WHERE id = $1;`,
+      [values.id, values.title, values.description, values.maxXp, values.minLevel, values.xp]
+    );
     console.log(`Updated quest ${values.id}`);
+  } else {
+    await client.query(
+      `INSERT INTO quest (title, description, max_xp, min_level) VALUES ($1, $2, $3, $4, $5);`,
+      [values.title, values.description, values.maxXp, values.minLevel]
+    );
+    console.log(`Created new quest ${values.title}`);
   }
 
   ctx.response.status = HttpStatus.CREATED;

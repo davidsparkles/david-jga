@@ -4,9 +4,8 @@ import Quests from "./Quests";
 import GameHeader from "./GameHeader";
 import { Permission } from "../permission";
 
-export default function Game(props: { gameId: string; permission: Permission }): JSX.Element {
-  const gameId = props.gameId;
-  const { data, error, refetch } = useData(gameId);
+export default function Game(props: { permission: Permission }): JSX.Element {
+  const { data, error, refetch } = useData();
 
   if (error) return <>Error: {JSON.stringify(error)}</>;
   if (data == null) return <>No Data Found</>;

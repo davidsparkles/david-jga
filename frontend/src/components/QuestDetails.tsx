@@ -8,12 +8,13 @@ interface Values {
   title: string;
   description: string;
   maxXp: number;
+  minLevel: number;
 }
 
 export default function QuestDetails(props: { quest: Quest; onBack: () => void; permission: Permission }): JSX.Element {
   const { quest, onBack, permission } = props;
 
-  const [values, setValues] = useState<Values>({ title: "", description: "", maxXp: 0 })
+  const [values, setValues] = useState<Values>({ title: "", description: "", maxXp: 0, minLevel: 0 })
 
   const { loading, error, post } = usePostQuest();
 
@@ -22,7 +23,8 @@ export default function QuestDetails(props: { quest: Quest; onBack: () => void; 
       setValues({
         title: quest.title ?? "",
         description: quest.description ?? "",
-        maxXp: quest.maxXp 
+        maxXp: quest.maxXp,
+        minLevel: quest.minLevel,
       })
     }
   }, [quest]);
@@ -61,6 +63,18 @@ export default function QuestDetails(props: { quest: Quest; onBack: () => void; 
       }
     </div>
     <div className="label">
+      Mindestens Level
+    </div>
+    <div className="value">
+      {
+        permission === "edit"
+        ?
+        (<input type="number" value={values.minLevel} onChange={(evt) => setValues({ ...values, minLevel: parseInt(evt.target.value, 10) })} />)
+        :
+        quest.minLevel
+      }
+    </div>
+    <div className="label">
       Maximale XP
     </div>
     <div className="value">
@@ -76,7 +90,7 @@ export default function QuestDetails(props: { quest: Quest; onBack: () => void; 
       Erreichte XP
     </div>
     <div className="value">
-      {quest.state !== "closed" ? "-" : quest.reachedXp}
+      {quest.state !== "closed" ? "-" : quest.xp}
     </div>
     {permission === "edit" && (
       <div className="saveContainer">

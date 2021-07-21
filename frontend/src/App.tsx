@@ -8,7 +8,7 @@ export default function App() {
 
   return (
     <div className="App" onTouchMove={(evt) => console.log(evt)}>
-      <Game gameId={"1"} permission={permission} />
+      <Game permission={permission} />
       {permission === "view" && <div className="role">Role: Viewer</div>}
       {permission === "edit" && <div className="role">Role: Editor</div>}
     </div>
