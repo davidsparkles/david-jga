@@ -20,7 +20,11 @@ function Progress(props: { max: number; current: number }): JSX.Element {
   return (
     <div className="gameProgressContainer">
       <div className="gameProgressBar">
-        <div style={{ width: `${ratio}%` }} className="gameProgressCurrent">{props.current}</div>
+        <div style={{ width: `${ratio}%` }} className="gameProgressCurrent">
+          <div className="gameProgressCurrentText">
+            {props.current}
+          </div>
+        </div>
       </div>
       {props.max}↑
     </div>
