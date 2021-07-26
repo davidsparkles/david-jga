@@ -1,0 +1,13 @@
+.levels {
+  text-align: left;
+}
+
+.levelsContainer {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 4fr 1fr;
+  grid-template-rows: repeat(auto-fill, 2em);
+  grid-row-gap: 1em;
+  grid-column-gap: 1em;
+  margin: 8px 0;
+}

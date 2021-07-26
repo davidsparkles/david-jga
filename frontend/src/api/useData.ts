@@ -13,6 +13,11 @@ export interface Quest {
   state: questState;
 }
 
+export interface Level {
+  id: number;
+  requiredXp: number;
+}
+
 export interface Data {
   maxLevel: number;
   currentLevel: number;
@@ -20,6 +25,7 @@ export interface Data {
   xpWithinCurrentLevel: number;
   xpToNextLevel: number;
   quests: Quest[];
+  levels: Level[];
 }
 
 async function getData(): Promise<Data> {

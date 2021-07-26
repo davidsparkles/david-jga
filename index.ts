@@ -73,7 +73,16 @@ router.get("/api/data", async (ctx, next)=>{
             FROM quest
             ORDER BY quest.min_level ASC, quest.title ASC
             ) sub
-              ), '[]'::json) AS quests
+        ), '[]'::json) AS quests,
+        COALESCE((
+          SELECT json_agg(row_to_json(sub_level)) FROM (
+            SELECT
+              id,
+              required_xp AS "requiredXp"
+            FROM level
+            ORDER BY id ASC
+            ) sub_level
+        ), '[]'::json) AS levels
       FROM (
         SELECT max(level.id) AS current_level, xps.sum AS current_xp
         FROM level,
@@ -112,6 +121,24 @@ router.post("/api/quest", async (ctx, next) => {
       [values.title, values.description, values.maxXp, values.minLevel]
     );
     console.log(`Created new quest ${values.title}`);
+  }
+
+  ctx.response.status = HttpStatus.CREATED;
+  next();
+});
+
+router.post("/api/levels", async (ctx, next) => {
+  const levels = ctx.request.body as any;
+  console.log("Received values: ", JSON.stringify(levels));
+
+  const client = await getClient();
+  await client.query("DELETE FROM level;");
+  for (const level of levels) {
+    await client.query(
+      `INSERT INTO level (id, required_xp) VALUES ($1, $2) ON CONFLICT ON CONSTRAINT level_pkey DO UPDATE SET required_xp = $2;`,
+      [level.id, level.requiredXp]
+    );
+    console.log(`Level upserted ${level.id}`);
   }
 
   ctx.response.status = HttpStatus.CREATED;
