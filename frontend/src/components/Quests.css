@@ -2,7 +2,7 @@
   display: grid;
   grid-auto-flow: row;
   height: 100%;
-  margin: 0 4px 24px 4px;
+  margin: 0 12px 24px 12px;
 }
 
 .questFilter {
@@ -13,7 +13,7 @@
 .questBox {
   border: 1px solid black;
   border-radius: 3px;
-  margin: 8px 8px;
+  margin: 8px 0;
   padding: 6px 6px;
 }
 

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Quest } from "../api/useData";
+import { usePostQuest } from "../api/usePostQuest";
 import { Permission } from "../permission";
 import QuestDetails from "./QuestDetails";
 import "./Quests.css";
@@ -7,6 +8,8 @@ import "./Quests.css";
 export default function Quests(props: { quests: Quest[]; permission: Permission; refetch: () => void }): JSX.Element {
   const [filterList, setFilterList] = useState<boolean>(false);
   const [selectedQuest, setSelectedQuest] = useState<Quest | null>(null);
+
+  const { loading, error, post } = usePostQuest();
 
   if (selectedQuest != null) {
     return <QuestDetails quest={selectedQuest} onBack={() => { setSelectedQuest(null); props.refetch() }} permission={props.permission} />;
@@ -42,6 +45,11 @@ export default function Quests(props: { quests: Quest[]; permission: Permission;
             }
           </div>
       ))}
+      <button onClick={() => post({ title: "Neue Quest", description: "", maxXp: 1, disabled: true, minLevel: 20 })}>
+        Neue Quest
+      </button>
+      {loading && "loading ..."}
+      {error && <>Fehler: {JSON.stringify(error)}</>}
     </div>
   );
 }
