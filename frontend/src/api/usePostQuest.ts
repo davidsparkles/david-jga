@@ -13,7 +13,7 @@ export function usePostQuest() {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<any | null>(null);
 
-  const post = useCallback(async (values: Values) => {
+  const post = useCallback(async (values: Values | { delete: true; id: string }) => {
     try {
       setLoading(true);
       await fetch(`${window.location.hostname === "localhost" ? "http://localhost:3000" : ""}/api/quest`, {

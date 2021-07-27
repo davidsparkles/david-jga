@@ -38,6 +38,11 @@ export default function QuestDetails(props: { quest: Quest; onBack: () => void; 
     onBack();
   }, [onBack, post, quest, values]);
 
+  // const onDelete = useCallback(async () => {
+  //   await post({ delete: true, id: quest.id });
+  //   onBack();
+  // }, [onBack, post, quest, values]);
+
   return <div className="questDetails">
     <div className="backArrowContainer">
       <button className="backArrow" onClick={() => onBack()}>🠔 Zurück</button>
@@ -118,8 +123,17 @@ export default function QuestDetails(props: { quest: Quest; onBack: () => void; 
       )
     }
     {permission === "edit" && (
-      <div className="saveContainer">
-        <button onClick={onSave}>Speichern</button> {loading ?? <>loading...</>} {error && <>{JSON.stringify(error)}</>}
+      <div className="buttonContainer">
+        <div className="saveContainer">
+          <button onClick={onSave}>Speichern</button>
+        </div>
+        {
+          // <div className="deleteContainer">
+          //   <button onClick={onDelete}>Quest löschen</button>
+          // </div>
+        }
+        {loading ?? <>loading...</>}
+        {error && <>{JSON.stringify(error)}</>}
       </div>
     )}
   </div>;

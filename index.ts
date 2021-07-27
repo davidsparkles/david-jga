@@ -109,7 +109,10 @@ router.post("/api/quest", async (ctx, next) => {
   console.log("Received values: ", JSON.stringify(values));
 
   const client = await getClient();
-  if (values.id != null) {
+  if (values.delete === true) {
+    await client.query(`DELETE FROM quest WHERE id = $1`, [values.id]);
+    console.log(`Deleted quest ${values.id}`);
+  } else if (values.id != null) {
     await client.query(
       `UPDATE quest SET title=$2, description=$3, max_xp = $4, min_level = $5, xp = $6, disabled = $7 WHERE id = $1;`,
       [values.id, values.title, values.description, values.maxXp, values.minLevel, values.xp, values.disabled]
