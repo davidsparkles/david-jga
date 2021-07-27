@@ -19,8 +19,13 @@ export default function Quests(props: { quests: Quest[]; permission: Permission;
       </div>
       {props.quests
         .filter(({ state }) => filterList === true ? state !== "closed" : true)
+        .filter(({ disabled }) => disabled === false || props.permission === "edit")
         .map((quest, index) => (
-          <div key={index} className={`questBox ${quest.state}`} onClick={() => !(props.permission === "none" && quest.state === "hidden") && setSelectedQuest(quest)}>
+          <div
+            key={index}
+            className={`questBox ${quest.state} ${quest.disabled ? "disabled" : ""}`}
+            onClick={() => !(props.permission === "none" && quest.state === "hidden") && setSelectedQuest(quest)}
+          >
             <div className="questHeader">
               <div className="questTitle">{(props.permission === "none" && quest.state === "hidden") || quest.title == null ? "🔒 ???" : `${quest.state === "hidden" ? "🔒 " : ""}${quest.title}`}</div>
               <div className="questPoints">

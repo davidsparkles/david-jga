@@ -10,12 +10,13 @@ interface Values {
   maxXp: number;
   minLevel: number;
   xp: number | null;
+  disabled: boolean;
 }
 
 export default function QuestDetails(props: { quest: Quest; onBack: () => void; permission: Permission }): JSX.Element {
   const { quest, onBack, permission } = props;
 
-  const [values, setValues] = useState<Values>({ title: "", description: "", maxXp: 0, minLevel: 0, xp: null })
+  const [values, setValues] = useState<Values>({ title: "", description: "", maxXp: 0, minLevel: 0, xp: null, disabled: false });
 
   const { loading, error, post } = usePostQuest();
 
@@ -26,7 +27,8 @@ export default function QuestDetails(props: { quest: Quest; onBack: () => void; 
         description: quest.description ?? "",
         maxXp: quest.maxXp,
         minLevel: quest.minLevel,
-        xp: quest.xp
+        xp: quest.xp,
+        disabled: quest.disabled ?? false
       })
     }
   }, [quest]);
@@ -103,6 +105,18 @@ export default function QuestDetails(props: { quest: Quest; onBack: () => void; 
         quest.state !== "closed" ? "-" : quest.xp
       }
     </div>
+    {
+      permission === "edit" && (
+        <>
+          <div className="label">
+            Ausblenden
+          </div>
+          <div className="value">
+            <input type="checkbox" checked={values.disabled} onChange={(evt) => setValues({ ...values, disabled: evt.target.checked })} />
+          </div>
+        </>
+      )
+    }
     {permission === "edit" && (
       <div className="saveContainer">
         <button onClick={onSave}>Speichern</button> {loading ?? <>loading...</>} {error && <>{JSON.stringify(error)}</>}

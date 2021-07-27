@@ -2,7 +2,7 @@
   display: grid;
   grid-auto-flow: row;
   height: 100%;
-  margin: 12px 4px 24px 4px;
+  margin: 0 4px 24px 4px;
 }
 
 .questFilter {
@@ -34,6 +34,10 @@
 
 .questBox.hidden {
   background-color: lightgray;
+}
+
+.questBox.disabled {
+  border-color: rgb(206, 3, 64);
 }
 
 .questHeader {

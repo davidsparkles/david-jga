@@ -5,6 +5,7 @@ interface Values {
   title: string;
   description: string;
   maxXp: number;
+  disabled: boolean;
 }
 
 export function usePostQuest() {

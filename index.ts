@@ -111,14 +111,14 @@ router.post("/api/quest", async (ctx, next) => {
   const client = await getClient();
   if (values.id != null) {
     await client.query(
-      `UPDATE quest SET title=$2, description=$3, max_xp = $4, min_level = $5, xp = $6 WHERE id = $1;`,
-      [values.id, values.title, values.description, values.maxXp, values.minLevel, values.xp]
+      `UPDATE quest SET title=$2, description=$3, max_xp = $4, min_level = $5, xp = $6, disabled = $7 WHERE id = $1;`,
+      [values.id, values.title, values.description, values.maxXp, values.minLevel, values.xp, values.disabled]
     );
     console.log(`Updated quest ${values.id}`);
   } else {
     await client.query(
-      `INSERT INTO quest (title, description, max_xp, min_level) VALUES ($1, $2, $3, $4, $5);`,
-      [values.title, values.description, values.maxXp, values.minLevel]
+      `INSERT INTO quest (title, description, max_xp, min_level, disabled) VALUES ($1, $2, $3, $4, $5, $6);`,
+      [values.title, values.description, values.maxXp, values.minLevel, values.disabled]
     );
     console.log(`Created new quest ${values.title}`);
   }
