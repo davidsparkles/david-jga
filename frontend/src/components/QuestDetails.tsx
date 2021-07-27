@@ -38,10 +38,10 @@ export default function QuestDetails(props: { quest: Quest; onBack: () => void; 
     onBack();
   }, [onBack, post, quest, values]);
 
-  // const onDelete = useCallback(async () => {
-  //   await post({ delete: true, id: quest.id });
-  //   onBack();
-  // }, [onBack, post, quest, values]);
+  const onDelete = useCallback(async () => {
+    await post({ delete: true, id: quest.id });
+    onBack();
+  }, [onBack, post, quest, values]);
 
   return <div className="questDetails">
     <div className="backArrowContainer">
@@ -127,11 +127,9 @@ export default function QuestDetails(props: { quest: Quest; onBack: () => void; 
         <div className="saveContainer">
           <button onClick={onSave}>Speichern</button>
         </div>
-        {
-          // <div className="deleteContainer">
-          //   <button onClick={onDelete}>Quest löschen</button>
-          // </div>
-        }
+        <div className="deleteContainer">
+          <button onClick={onDelete}>Quest löschen</button>
+        </div>
         {loading ?? <>loading...</>}
         {error && <>{JSON.stringify(error)}</>}
       </div>

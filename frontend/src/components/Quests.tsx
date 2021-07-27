@@ -16,6 +16,7 @@ export default function Quests(props: { quests: Quest[]; permission: Permission;
   }
 
   return (
+    <>
     <div className="questList">
       <div className="questFilter">
         <input type="checkbox" checked={filterList} onChange={(evt) => setFilterList(evt.target.checked)} />Erledigte Quests verbergen
@@ -45,12 +46,18 @@ export default function Quests(props: { quests: Quest[]; permission: Permission;
             }
           </div>
       ))}
-      <button onClick={() => post({ title: "Neue Quest", description: "", maxXp: 1, disabled: true, minLevel: 20 })}>
+    </div>
+    <div className="createQuestContainer">
+      <button onClick={async () => {
+        await post({ title: "Neue Quest", description: "", maxXp: 1, disabled: true, minLevel: 20 });
+        props.refetch();
+      }}>
         Neue Quest
       </button>
-      {loading && "loading ..."}
-      {error && <>Fehler: {JSON.stringify(error)}</>}
     </div>
+    {loading && "loading ..."}
+    {error && <>Fehler: {JSON.stringify(error)}</>}
+    </>
   );
 }
 
