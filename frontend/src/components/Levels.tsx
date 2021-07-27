@@ -42,7 +42,7 @@ export default function Levels(props: { levels: Level[] }): JSX.Element {
       ))}
       <button className="levelAdd" onClick={() => setValues([...values, values[values.length - 1] + 1])}>Neues Level</button>
       <br />
-      <button className="levelsSave" onClick={() => post(values.map((value, index) => ({ id: index, requiredXp: value })))}>Speichern</button>
+      <button className="levelsSave" onClick={() => post(values.map((value, index) => ({ id: index + 1, requiredXp: value })))}>Speichern</button>
       {loading && <>loading...</>}
       {error && <>Error: {JSON.stringify(error)}</>}
     </div>
