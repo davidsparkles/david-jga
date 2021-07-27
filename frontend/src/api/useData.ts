@@ -10,6 +10,7 @@ export interface Quest {
   xp: number | null;
   minLevel: number;
   disabled: boolean;
+  archived: boolean;
   state: questState;
 }
 

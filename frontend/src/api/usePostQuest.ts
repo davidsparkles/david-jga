@@ -7,6 +7,7 @@ interface Values {
   maxXp: number;
   minLevel: number;
   disabled: boolean;
+  archived: boolean;
 }
 
 export function usePostQuest() {

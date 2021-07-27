@@ -7,6 +7,7 @@ import "./Quests.css";
 
 export default function Quests(props: { quests: Quest[]; permission: Permission; refetch: () => void }): JSX.Element {
   const [filterList, setFilterList] = useState<boolean>(false);
+  const [filterArchivedList, setFilterArchivedList] = useState<boolean>(true);
   const [selectedQuest, setSelectedQuest] = useState<Quest | null>(null);
 
   const { loading, error, post } = usePostQuest();
@@ -21,13 +22,17 @@ export default function Quests(props: { quests: Quest[]; permission: Permission;
       <div className="questFilter">
         <input type="checkbox" checked={filterList} onChange={(evt) => setFilterList(evt.target.checked)} />Erledigte Quests verbergen
       </div>
+      <div className="questFilter">
+        <input type="checkbox" checked={filterArchivedList} onChange={(evt) => setFilterArchivedList(evt.target.checked)} />Archivierte Quests verbergen
+      </div>
       {props.quests
         .filter(({ state }) => filterList === true ? state !== "closed" : true)
-        .filter(({ disabled }) => disabled === false || props.permission === "edit")
+        .filter(({ archived }) => filterArchivedList === true ? archived === false : true)
+        .filter(({ archived, disabled }) => (archived === false && disabled === false) || props.permission === "edit")
         .map((quest, index) => (
           <div
             key={index}
-            className={`questBox ${quest.state} ${quest.disabled ? "disabled" : ""}`}
+            className={`questBox ${quest.state} ${quest.disabled ? "disabled" : ""} ${quest.archived ? "archived" : ""}`}
             onClick={() => !(props.permission === "none" && quest.state === "hidden") && setSelectedQuest(quest)}
           >
             <div className="questHeader">
@@ -49,7 +54,7 @@ export default function Quests(props: { quests: Quest[]; permission: Permission;
     </div>
     <div className="createQuestContainer">
       <button onClick={async () => {
-        await post({ title: "Neue Quest", description: "", maxXp: 1, disabled: true, minLevel: 20 });
+        await post({ title: "Neue Quest", description: "", maxXp: 1, disabled: true, minLevel: 20, archived: false });
         props.refetch();
       }}>
         Neue Quest

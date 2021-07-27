@@ -40,6 +40,11 @@
   border-color: rgb(206, 3, 64);
 }
 
+.questBox.archived {
+  border-color: rgb(206, 3, 64);
+  background-color: rgb(206, 3, 64);
+}
+
 .questHeader {
   display: grid;
   grid-template-columns: 75% 25%;

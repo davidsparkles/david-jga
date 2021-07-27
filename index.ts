@@ -60,6 +60,7 @@ router.get("/api/data", async (ctx, next)=>{
             SELECT
               id,
               disabled,
+              archived,
               title,
               description,
               quest.max_xp AS "maxXp",
@@ -84,11 +85,11 @@ router.get("/api/data", async (ctx, next)=>{
             ) sub_level
         ), '[]'::json) AS levels
       FROM (
-        SELECT max(level.id) AS current_level, xps.sum AS current_xp
-        FROM level,
-          LATERAL (SELECT sum(COALESCE(xp, 0)) FROM quest) xps
-        WHERE xps.sum >= level.required_xp
-        GROUP BY xps.sum
+        SELECT max(level.id) AS current_level, COALESCE(xps.sum, 0) AS current_xp
+        FROM level
+			    LEFT JOIN LATERAL (SELECT sum(COALESCE(xp, 0)) FROM quest) xps ON TRUE
+        WHERE COALESCE(xps.sum, 0) >= level.required_xp
+        GROUP BY COALESCE(xps.sum, 0)
       ) game_level
     ) d;
   `, []);
@@ -114,14 +115,14 @@ router.post("/api/quest", async (ctx, next) => {
     console.log(`Deleted quest ${values.id}`);
   } else if (values.id != null) {
     await client.query(
-      `UPDATE quest SET title=$2, description=$3, max_xp = $4, min_level = $5, xp = $6, disabled = $7 WHERE id = $1;`,
-      [values.id, values.title, values.description, values.maxXp, values.minLevel, values.xp, values.disabled]
+      `UPDATE quest SET title=$2, description=$3, max_xp = $4, min_level = $5, xp = $6, disabled = $7, archived = $8 WHERE id = $1;`,
+      [values.id, values.title, values.description, values.maxXp, values.minLevel, values.xp, values.disabled, values.archived]
     );
     console.log(`Updated quest ${values.id}`);
   } else {
     await client.query(
-      `INSERT INTO quest (title, description, max_xp, min_level, disabled) VALUES ($1, $2, $3, $4, $5);`,
-      [values.title, values.description, values.maxXp, values.minLevel, values.disabled]
+      `INSERT INTO quest (title, description, max_xp, min_level, disabled, archived) VALUES ($1, $2, $3, $4, $5, $6);`,
+      [values.title, values.description, values.maxXp, values.minLevel, values.disabled, values.archived]
     );
     console.log(`Created new quest ${values.title}`);
   }

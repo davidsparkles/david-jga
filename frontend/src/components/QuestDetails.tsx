@@ -11,12 +11,13 @@ interface Values {
   minLevel: number;
   xp: number | null;
   disabled: boolean;
+  archived: boolean;
 }
 
 export default function QuestDetails(props: { quest: Quest; onBack: () => void; permission: Permission }): JSX.Element {
   const { quest, onBack, permission } = props;
 
-  const [values, setValues] = useState<Values>({ title: "", description: "", maxXp: 0, minLevel: 0, xp: null, disabled: false });
+  const [values, setValues] = useState<Values>({ title: "", description: "", maxXp: 0, minLevel: 0, xp: null, disabled: false, archived: false });
 
   const { loading, error, post } = usePostQuest();
 
@@ -28,7 +29,8 @@ export default function QuestDetails(props: { quest: Quest; onBack: () => void; 
         maxXp: quest.maxXp,
         minLevel: quest.minLevel,
         xp: quest.xp,
-        disabled: quest.disabled ?? false
+        disabled: quest.disabled ?? false,
+        archived: quest.archived ?? false
       })
     }
   }, [quest]);
@@ -41,7 +43,7 @@ export default function QuestDetails(props: { quest: Quest; onBack: () => void; 
   const onDelete = useCallback(async () => {
     await post({ delete: true, id: quest.id });
     onBack();
-  }, [onBack, post, quest, values]);
+  }, [onBack, post, quest]);
 
   return <div className="questDetails">
     <div className="backArrowContainer">
@@ -122,14 +124,28 @@ export default function QuestDetails(props: { quest: Quest; onBack: () => void; 
         </>
       )
     }
+    {
+      permission === "edit" && (
+        <>
+          <div className="label">
+            Archiviert
+          </div>
+          <div className="value">
+            <input type="checkbox" checked={values.archived} onChange={(evt) => setValues({ ...values, archived: evt.target.checked })} />
+          </div>
+        </>
+      )
+    }
     {permission === "edit" && (
       <div className="buttonContainer">
         <div className="saveContainer">
           <button onClick={onSave}>Speichern</button>
         </div>
-        <div className="deleteContainer">
-          <button onClick={onDelete}>Quest löschen</button>
-        </div>
+        {quest.archived && (
+          <div className="deleteContainer">
+            <button onClick={onDelete}>Quest löschen</button>
+          </div>
+        )}
         {loading ?? <>loading...</>}
         {error && <>{JSON.stringify(error)}</>}
       </div>
