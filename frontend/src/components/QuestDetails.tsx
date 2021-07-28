@@ -150,5 +150,14 @@ export default function QuestDetails(props: { quest: Quest; onBack: () => void; 
         {error && <>{JSON.stringify(error)}</>}
       </div>
     )}
+    <h4>Versionen</h4>
+    <div className="versionList">
+      {quest.versions?.map(({ id, created_at, fields }) => (
+        <div className="versionItem">
+          Version {id} vom {new Intl.DateTimeFormat("de").format(new Date(created_at))} {created_at.substring(11, 19)}{" "}
+          <button onClick={() => setValues({ ...values, ...fields, maxXp: fields.max_xp, minLevel: fields.min_level })}>🔃</button>
+        </div>
+      ))}
+    </div>
   </div>;
 }

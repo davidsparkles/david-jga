@@ -12,6 +12,14 @@ export interface Quest {
   disabled: boolean;
   archived: boolean;
   state: questState;
+  versions?: Version[];
+}
+
+export interface Version {
+  id: number;
+  quest_id: number;
+  created_at: string;
+  fields: any;
 }
 
 export interface Level {

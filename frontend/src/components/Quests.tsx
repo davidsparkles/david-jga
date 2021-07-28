@@ -52,14 +52,16 @@ export default function Quests(props: { quests: Quest[]; permission: Permission;
           </div>
       ))}
     </div>
-    <div className="createQuestContainer">
-      <button onClick={async () => {
-        await post({ title: "Neue Quest", description: "", maxXp: 1, disabled: true, minLevel: 20, archived: false });
-        props.refetch();
-      }}>
-        Neue Quest
-      </button>
-    </div>
+    {props.permission === "edit" && (
+      <div className="createQuestContainer">
+        <button onClick={async () => {
+          await post({ title: "Neue Quest", description: "", maxXp: 1, disabled: true, minLevel: 20, archived: false });
+          props.refetch();
+        }}>
+          Neue Quest
+        </button>
+      </div>
+    )}
     {loading && "loading ..."}
     {error && <>Fehler: {JSON.stringify(error)}</>}
     </>

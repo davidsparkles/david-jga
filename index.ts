@@ -70,7 +70,12 @@ router.get("/api/data", async (ctx, next)=>{
               WHEN min_level > game_level.current_level THEN 'hidden'
               WHEN quest.xp IS NOT NULL THEN 'closed'
               ELSE 'open'
-              END AS state
+              END AS state,
+              COALESCE ((
+                SELECT json_agg(row_to_json(sub_version)) FROM (
+                  SELECT * FROM quest_version WHERE quest_version.quest_id = quest.id ORDER BY created_at DESC
+                ) AS sub_version
+              ), '[]'::json) AS versions
             FROM quest
             ORDER BY quest.min_level ASC, quest.title ASC
             ) sub
