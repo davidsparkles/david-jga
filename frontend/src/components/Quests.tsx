@@ -22,9 +22,11 @@ export default function Quests(props: { quests: Quest[]; permission: Permission;
       <div className="questFilter">
         <input type="checkbox" checked={filterList} onChange={(evt) => setFilterList(evt.target.checked)} />Erledigte Quests verbergen
       </div>
-      <div className="questFilter">
-        <input type="checkbox" checked={filterArchivedList} onChange={(evt) => setFilterArchivedList(evt.target.checked)} />Archivierte Quests verbergen
-      </div>
+      {props.permission === "edit" && (
+        <div className="questFilter">
+          <input type="checkbox" checked={filterArchivedList} onChange={(evt) => setFilterArchivedList(evt.target.checked)} />Archivierte Quests verbergen
+        </div>
+      )}
       {props.quests
         .filter(({ state }) => filterList === true ? state !== "closed" : true)
         .filter(({ archived }) => filterArchivedList === true ? archived === false : true)
