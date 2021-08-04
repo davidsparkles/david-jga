@@ -1,0 +1,17 @@
+FROM node:14
+
+ARG PORT=${PORT}
+ARG DATABASE_URL=${DATABASE_URL}
+
+COPY package.json package.json
+COPY package-lock.json package-lock.json
+RUN npm install --save-prod
+
+COPY src ./src
+COPY tsconfig.json ./tsconfig.json
+COPY index.ts ./index.ts
+
+COPY frontend ./frontend
+RUN npm build
+
+CMD npm start
