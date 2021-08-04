@@ -1,4 +1,4 @@
-# David JGA Quest Game
+# Quest Master
 
 - Quests give XP
 - XP give Lvl
