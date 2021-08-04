@@ -14,6 +14,6 @@ COPY index.ts ./index.ts
 COPY frontend ./frontend
 RUN yarn run build
 
-EXPOSE 3000:3000
+EXPOSE 80
 
 CMD yarn run start
