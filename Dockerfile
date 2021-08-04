@@ -12,7 +12,6 @@ COPY tsconfig.json ./tsconfig.json
 COPY index.ts ./index.ts
 
 COPY frontend ./frontend
-RUN yarn run build
 
 EXPOSE 80
 
