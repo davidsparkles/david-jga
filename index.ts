@@ -24,7 +24,7 @@ app.use(async (ctx, next) => {
   await next();
 }).use(mount("/", static_pages));
 
-const PORT = process.env.PORT || 3000;
+const PORT = 3000;
 
 app.use(BodyParser({
   extendTypes: {
