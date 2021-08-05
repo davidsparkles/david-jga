@@ -24,7 +24,7 @@ app.use(async (ctx, next) => {
   await next();
 }).use(mount("/", static_pages));
 
-const PORT = 80;
+const PORT = process.env.PORT || 80;
 
 app.use(BodyParser({
   extendTypes: {
@@ -92,7 +92,7 @@ router.get("/api/data", async (ctx, next)=>{
       FROM (
         SELECT max(level.id) AS current_level, COALESCE(xps.sum, 0) AS current_xp
         FROM level
-			    LEFT JOIN LATERAL (SELECT sum(COALESCE(xp, 0)) FROM quest) xps ON TRUE
+			    LEFT JOIN LATERAL (SELECT sum(COALESCE(xp, 0)) FROM quest WHERE archived != TRUE) xps ON TRUE
         WHERE COALESCE(xps.sum, 0) >= level.required_xp
         GROUP BY COALESCE(xps.sum, 0)
       ) game_level

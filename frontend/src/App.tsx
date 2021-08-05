@@ -16,8 +16,8 @@ export default function App() {
 }
 
 function getPermission(): Permission {
-  const path = window.location.pathname;
-  if (path.toLowerCase().includes("fitti")) return "view";
-  if (path.toLowerCase().includes("broiler")) return "edit";
+  const search = window.location.search;
+  if (search.toLowerCase().includes("fitti")) return "view";
+  if (search.toLowerCase().includes("broiler")) return "edit";
   return "none";
 }

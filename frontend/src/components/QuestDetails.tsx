@@ -121,43 +121,34 @@ export default function QuestDetails(props: { quest: Quest; onBack: () => void; 
           <div className="value">
             <input type="checkbox" checked={values.disabled} onChange={(evt) => setValues({ ...values, disabled: evt.target.checked })} />
           </div>
-        </>
-      )
-    }
-    {
-      permission === "edit" && (
-        <>
           <div className="label">
             Archiviert
           </div>
           <div className="value">
             <input type="checkbox" checked={values.archived} onChange={(evt) => setValues({ ...values, archived: evt.target.checked })} />
           </div>
-        </>
-      )
-    }
-    {permission === "edit" && (
-      <div className="buttonContainer">
-        <div className="saveContainer">
-          <button onClick={onSave}>Speichern</button>
-        </div>
-        {quest.archived && (
-          <div className="deleteContainer">
-            <button onClick={onDelete}>Quest löschen</button>
+        <div className="buttonContainer">
+          <div className="saveContainer">
+            <button onClick={onSave}>Speichern</button>
           </div>
-        )}
-        {loading ?? <>loading...</>}
-        {error && <>{JSON.stringify(error)}</>}
-      </div>
-    )}
-    <h4>Versionen</h4>
-    <div className="versionList">
-      {quest.versions?.map(({ id, created_at, fields }) => (
-        <div className="versionItem">
-          Version {id} vom {new Intl.DateTimeFormat("de").format(new Date(created_at))} {created_at.substring(11, 19)}{" "}
-          <button onClick={() => setValues({ ...values, ...fields, maxXp: fields.max_xp, minLevel: fields.min_level })}>🔃</button>
+          {quest.archived && (
+            <div className="deleteContainer">
+              <button onClick={onDelete}>Quest löschen</button>
+            </div>
+          )}
+          {loading ?? <>loading...</>}
+          {error && <>{JSON.stringify(error)}</>}
         </div>
-      ))}
-    </div>
+        <h4>Versionen</h4>
+        <div className="versionList">
+          {quest.versions?.map(({ id, created_at, fields }) => (
+            <div className="versionItem">
+              Version {id} vom {new Intl.DateTimeFormat("de").format(new Date(created_at))} {created_at.substring(11, 19)}{" "}
+              <button onClick={() => setValues({ ...values, ...fields, maxXp: fields.max_xp, minLevel: fields.min_level })}>🔃</button>
+            </div>
+          ))}
+        </div>
+      </>
+    )}
   </div>;
 }
