@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
+import { BiArrowBack } from "react-icons/bi";
 import { Quest } from "../api/useData";
 import { usePostQuest } from "../api/usePostQuest";
 import { Permission } from "../permission";
@@ -46,20 +47,17 @@ export default function QuestDetails(props: { quest: Quest; onBack: () => void; 
   }, [onBack, post, quest]);
 
   return <div className="questDetails">
-    <div className="backArrowContainer">
-      <button className="backArrow" onClick={() => onBack()}>🠔 Zurück</button>
-    </div>
-    <div className="label">
-      Titel
-    </div>
-    <div className="value">
-      {
-        permission === "edit"
-        ?
-        (<input value={values.title} onChange={(evt) => setValues({ ...values, title: evt.target.value })} />)
-        :
-        quest.title ?? "-"
-      }
+    <div className="backArrowContainer" >
+      <BiArrowBack className="backArrow" onClick={() => onBack()} />
+      <div className="value">
+        {
+          permission === "edit"
+          ?
+          (<input value={values.title} onChange={(evt) => setValues({ ...values, title: evt.target.value })} />)
+          :
+          quest.title ?? "-"
+        }
+      </div>
     </div>
     <div className="label">
       Beschreibung
