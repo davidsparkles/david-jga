@@ -1,0 +1,21 @@
+.gameFooter {
+  display: grid;
+  grid-template-columns: auto auto auto;
+  overflow: hidden;
+  background-color: #333;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
+
+.gameFooter a {
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+.gameFooter a:hover {
+  background: #ddd;
+  color: black;
+}

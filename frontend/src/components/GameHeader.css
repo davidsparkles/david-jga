@@ -1,4 +1,9 @@
 .gameHeader {
+  position: fixed;
+  width: calc(100% - 42px);
+  top: 0;
+  overflow: hidden;
+  background-color: white;
   padding: 12px 21px;
   border-bottom: 3px black solid;
   display: grid;

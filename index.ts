@@ -18,7 +18,7 @@ process.on("unhandledRejection", (reason, p) => {
 
 const app = new Koa();
 
-const REACT_ROUTER_PATHS = ["/game", "/fitti", "/broiler"];
+const REACT_ROUTER_PATHS = ["/quests", "/rewards", "/levels"];
 
 const static_pages = new Koa();
 static_pages.use(serve(__dirname + "/frontend/build")); //serve the build directory

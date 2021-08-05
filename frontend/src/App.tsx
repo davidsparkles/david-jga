@@ -7,10 +7,8 @@ export default function App() {
   const [permission] = useState<Permission>(getPermission());
 
   return (
-    <div className="App" onTouchMove={(evt) => console.log(evt)}>
+    <div className="app" onTouchMove={(evt) => console.log(evt)}>
       <Game permission={permission} />
-      {permission === "view" && <div className="role">Role: Viewer</div>}
-      {permission === "edit" && <div className="role">Role: Editor</div>}
     </div>
   );
 }
