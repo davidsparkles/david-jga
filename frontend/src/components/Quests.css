@@ -2,7 +2,7 @@
   display: grid;
   grid-auto-flow: row;
   height: 100%;
-  margin: 0 12px 24px 12px;
+  margin: 0 12px 0 12px;
 }
 
 .questFilter {
@@ -67,6 +67,6 @@
 }
 
 .createQuestContainer {
-  margin: 0 12px;
+  margin: 0 12px 24px 12px;
   text-align: left;
 }
