@@ -11,6 +11,11 @@ import { getClient} from "./src/getClient";
 import dotenv = require('dotenv');
 dotenv.config();
 
+process.on("unhandledRejection", (reason, p) => {
+  console.warn("Unhandled Rejection at: Promise", p, "reason:", reason);
+});
+
+
 const app = new Koa();
 
 const REACT_ROUTER_PATHS = ["/game", "/fitti", "/broiler"];

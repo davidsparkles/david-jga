@@ -44,24 +44,28 @@ async function getData(): Promise<Data> {
   throw new Error(res.statusText);
 }
 
-export function useData(): { data?: Data; error?: any; refetch: () => void } {
+export function useData(): { data?: Data; error?: any; loading: boolean; refetch: () => void } {
+  const [loading, setLoading] = useState<boolean>(false);
   const [data, setData] = useState<Data | undefined>(undefined);
   const [error, setError] = useState<any | undefined>(undefined);
 
   const refetch = useCallback(() => {
     (async () => {
       try {
+        setLoading(true);
         setData(await getData());
         setError(undefined);
       } catch (err) {
         console.log(err);
         setData(undefined);
-        setError("some error");
+        setError("Upps ein Fehler ist aufgetreten.");
+      } finally {
+        setLoading(false);
       }
     })();
   }, []);
 
   useEffect(refetch, [refetch]);
 
-  return { data, error, refetch };
+  return { data, error, loading, refetch };
 }

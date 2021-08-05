@@ -2,14 +2,14 @@ import React from "react";
 import { Data } from "../api/useData";
 import "./GameHeader.css";
 
-export default function GameHeader(props: { data: Data }): JSX.Element {
+export default function GameHeader(props: { data?: Data }): JSX.Element {
   return (
     <div className="gameHeader">
       <div className="gameHeaderTitle">Quest Master</div>
       <div className="gameHeaderLevel">
-        Level {props.data.currentLevel} / {props.data.maxLevel}
+        Level {props.data?.currentLevel ?? 1} / {props.data?.maxLevel ?? "?"}
       </div>
-      <Progress current={props.data.xpWithinCurrentLevel} max={props.data.xpToNextLevel + props.data.xpWithinCurrentLevel} />
+      <Progress current={props.data?.xpWithinCurrentLevel ?? 0} max={(props.data?.xpToNextLevel ?? 0) + (props.data?.xpWithinCurrentLevel ?? 1)} />
     </div>
   );
 }
