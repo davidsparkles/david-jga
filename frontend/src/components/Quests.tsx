@@ -6,8 +6,8 @@ import QuestDetails from "./QuestDetails";
 import "./Quests.css";
 
 export default function Quests(props: { quests: Quest[]; permission: Permission; refetch: () => void }): JSX.Element {
-  const [filterList, setFilterList] = useState<boolean>(false);
-  const [filterArchivedList, setFilterArchivedList] = useState<boolean>(true);
+  const [filterList, setFilterList] = useState<boolean>(true);
+  const [filterArchivedList, setFilterArchivedList] = useState<boolean>(false);
   const [selectedQuest, setSelectedQuest] = useState<Quest | null>(null);
 
   const { loading, error, post } = usePostQuest();
@@ -20,16 +20,16 @@ export default function Quests(props: { quests: Quest[]; permission: Permission;
     <>
     <div className="questList">
       <div className="questFilter">
-        <input type="checkbox" checked={filterList} onChange={(evt) => setFilterList(evt.target.checked)} />Erledigte Quests verbergen
+        <input type="checkbox" checked={filterList} onChange={(evt) => setFilterList(evt.target.checked)} />Erledigte Quests
       </div>
       {props.permission === "edit" && (
         <div className="questFilter">
-          <input type="checkbox" checked={filterArchivedList} onChange={(evt) => setFilterArchivedList(evt.target.checked)} />Archivierte Quests verbergen
+          <input type="checkbox" checked={filterArchivedList} onChange={(evt) => setFilterArchivedList(evt.target.checked)} />Archivierte Quests
         </div>
       )}
       {props.quests
-        .filter(({ state }) => filterList === true ? state !== "closed" : true)
-        .filter(({ archived }) => filterArchivedList === true ? archived === false : true)
+        .filter(({ state }) => filterList === true ? true : state !== "closed")
+        .filter(({ archived }) => filterArchivedList === true ? true : archived === false)
         .filter(({ archived, disabled }) => (archived === false && disabled === false) || props.permission === "edit")
         .map((quest, index) => (
           <div
