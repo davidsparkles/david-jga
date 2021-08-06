@@ -1,6 +1,6 @@
 .gameFooter {
   display: grid;
-  grid-template-columns: auto auto auto;
+  grid-template-columns: auto auto;
   overflow: hidden;
   background-color: #333;
   position: fixed;

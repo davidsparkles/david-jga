@@ -6,6 +6,7 @@ import GameHeader from "./GameHeader";
 import GameFooter from "./GameFooter";
 import { Permission } from "../permission";
 import Levels from "./Levels";
+import Rewards from "./Rewards";
 import "./Game.css";
 
 export default function Game(props: { permission: Permission }): JSX.Element {
@@ -26,12 +27,15 @@ export default function Game(props: { permission: Permission }): JSX.Element {
                 <Route path="/quests">
                   <Quests quests={data.quests} permission={props.permission} refetch={refetch} />
                 </Route>
+                <Route path="/rewards">
+                  <Rewards permission={props.permission} refetch={refetch} />
+                </Route>
               </Switch>
             </>
           )
         }
       </div>
-      <Route path="/" component={GameFooter} />
+      <Route path="/" component={(p: any): JSX.Element => <GameFooter {...p} permission={props.permission} />} />
     </div>
   );
 }
