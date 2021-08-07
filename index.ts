@@ -44,7 +44,7 @@ const router = new Router();
 
 
 router.get("/api/data", async (ctx, next)=>{
-
+  console.log(ctx.cookies.get("token"));
   const client = await getClient();
   const res = await client.query(`
     SELECT row_to_json(d) AS data FROM (

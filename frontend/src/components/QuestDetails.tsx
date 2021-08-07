@@ -114,7 +114,7 @@ export default function QuestDetails(props: { quest: Quest; onBack: () => void; 
       permission === "edit" && (
         <>
           <div className="label">
-            Ausblenden
+            Versteckt
           </div>
           <div className="value">
             <input type="checkbox" checked={values.disabled} onChange={(evt) => setValues({ ...values, disabled: evt.target.checked })} />

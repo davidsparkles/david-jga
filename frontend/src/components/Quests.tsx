@@ -1,3 +1,4 @@
+import Cookies from "js-cookie";
 import React, { useState } from "react";
 import { Quest } from "../api/useData";
 import { usePostQuest } from "../api/usePostQuest";
@@ -74,7 +75,7 @@ export default function Quests(props: { quests: Quest[]; permission: Permission;
             // Let's check whether notification permissions have already been granted
             else if (Notification.permission === "granted") {
               // If it's okay let's create a notification
-              new Notification("Unlocked next level!");
+              setTimeout(() => new Notification("Unlocked next level 2!"), 3000);
             }
 
             // Otherwise, we need to ask the user for permission
@@ -82,7 +83,7 @@ export default function Quests(props: { quests: Quest[]; permission: Permission;
               Notification.requestPermission().then(function (permission) {
                 // If the user accepts, let's create a notification
                 if (permission === "granted") {
-                  new Notification("Unlocked next level!");
+                  setTimeout(() => new Notification("Unlocked next level 2!"), 3000);
                 }
               });
             }
@@ -90,36 +91,14 @@ export default function Quests(props: { quests: Quest[]; permission: Permission;
             // At last, if the user has denied notifications, and you
             // want to be respectful there is no need to bother them any more.
           }}>
-            Notify me!
+            Notify me in 3 secs!
           </button>
         </div>
         <div>
           <button onClick={() => {
-            // Let's check if the browser supports notifications
-            if (!("Notification" in window)) {
-              alert("This browser does not support desktop notification");
-            }
-
-            // Let's check whether notification permissions have already been granted
-            else if (Notification.permission === "granted") {
-              // If it's okay let's create a notification
-              setTimeout(() => new Notification("Unlocked next level 2!"), 5000);
-            }
-
-            // Otherwise, we need to ask the user for permission
-            else if (Notification.permission !== "denied") {
-              Notification.requestPermission().then(function (permission) {
-                // If the user accepts, let's create a notification
-                if (permission === "granted") {
-                  setTimeout(() => new Notification("Unlocked next level 2!"), 5000);
-                }
-              });
-            }
-
-            // At last, if the user has denied notifications, and you
-            // want to be respectful there is no need to bother them any more.
+            Cookies.remove("token");
           }}>
-            Notify me in 5 secs!
+            Log Out!
           </button>
         </div>
       </div>

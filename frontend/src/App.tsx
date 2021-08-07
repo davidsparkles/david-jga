@@ -1,3 +1,4 @@
+import Cookies from "js-cookie";
 import React, { useState } from "react";
 import "./App.css";
 import Game from "./components/Game";
@@ -14,8 +15,10 @@ export default function App() {
 }
 
 function getPermission(): Permission {
-  const search = window.location.search;
-  if (search.toLowerCase().includes("fitti")) return "view";
-  if (search.toLowerCase().includes("broiler")) return "edit";
+  const params = new URLSearchParams(window.location.search);
+  const token = params.get("token") ?? Cookies.get("token");
+  if (token != null) Cookies.set("token", token, { sameSite: "lax", expires: 30 });
+  if (token === "fitti") return "view";
+  if (token === "broiler") return "edit";
   return "none";
 }
