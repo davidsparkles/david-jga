@@ -55,13 +55,73 @@ export default function Quests(props: { quests: Quest[]; permission: Permission;
       ))}
     </div>
     {props.permission === "edit" && (
-      <div className="createQuestContainer">
-        <button onClick={async () => {
-          await post({ title: "Neue Quest", description: "", maxXp: 1, disabled: true, minLevel: 20, archived: false });
-          props.refetch();
-        }}>
-          Neue Quest
-        </button>
+      <div style={{ display: "grid", gridTemplateColumns: "auto auto auto" }}>
+        <div className="createQuestContainer">
+          <button onClick={async () => {
+            await post({ title: "Neue Quest", description: "", maxXp: 1, disabled: true, minLevel: 20, archived: false });
+            props.refetch();
+          }}>
+            Neue Quest
+          </button>
+        </div>
+        <div>
+          <button onClick={() => {
+            // Let's check if the browser supports notifications
+            if (!("Notification" in window)) {
+              alert("This browser does not support desktop notification");
+            }
+
+            // Let's check whether notification permissions have already been granted
+            else if (Notification.permission === "granted") {
+              // If it's okay let's create a notification
+              new Notification("Unlocked next level!");
+            }
+
+            // Otherwise, we need to ask the user for permission
+            else if (Notification.permission !== "denied") {
+              Notification.requestPermission().then(function (permission) {
+                // If the user accepts, let's create a notification
+                if (permission === "granted") {
+                  new Notification("Unlocked next level!");
+                }
+              });
+            }
+
+            // At last, if the user has denied notifications, and you
+            // want to be respectful there is no need to bother them any more.
+          }}>
+            Notify me!
+          </button>
+        </div>
+        <div>
+          <button onClick={() => {
+            // Let's check if the browser supports notifications
+            if (!("Notification" in window)) {
+              alert("This browser does not support desktop notification");
+            }
+
+            // Let's check whether notification permissions have already been granted
+            else if (Notification.permission === "granted") {
+              // If it's okay let's create a notification
+              setTimeout(() => new Notification("Unlocked next level 2!"), 5000);
+            }
+
+            // Otherwise, we need to ask the user for permission
+            else if (Notification.permission !== "denied") {
+              Notification.requestPermission().then(function (permission) {
+                // If the user accepts, let's create a notification
+                if (permission === "granted") {
+                  setTimeout(() => new Notification("Unlocked next level 2!"), 5000);
+                }
+              });
+            }
+
+            // At last, if the user has denied notifications, and you
+            // want to be respectful there is no need to bother them any more.
+          }}>
+            Notify me in 5 secs!
+          </button>
+        </div>
       </div>
     )}
     {loading && "loading ..."}

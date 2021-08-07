@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Link, Route, Switch } from "react-router-dom";
+import React from "react";
+import { Route, Switch } from "react-router-dom";
 import { useData } from "../api/useData";
 import Quests from "./Quests";
 import GameHeader from "./GameHeader";
