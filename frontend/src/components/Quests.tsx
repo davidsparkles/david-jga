@@ -1,5 +1,5 @@
-import Cookies from "js-cookie";
 import React, { useState } from "react";
+import Cookies from "js-cookie";
 import { Quest } from "../api/useData";
 import { usePostQuest } from "../api/usePostQuest";
 import { Permission } from "../permission";
@@ -7,8 +7,8 @@ import QuestDetails from "./QuestDetails";
 import "./Quests.css";
 
 export default function Quests(props: { quests: Quest[]; permission: Permission; refetch: () => void }): JSX.Element {
-  const [filterList, setFilterList] = useState<boolean>(true);
-  const [filterArchivedList, setFilterArchivedList] = useState<boolean>(false);
+  const [filterList, setFilterList] = useState<boolean>(Cookies.get("filterList") != null ? Cookies.get("filterList") === "true" : true);
+  const [filterArchivedList, setFilterArchivedList] = useState<boolean>(Cookies.get("filterArchivedList") != null ? Cookies.get("filterArchivedList") === "true" : false);
   const [selectedQuest, setSelectedQuest] = useState<Quest | null>(null);
 
   const { loading, error, post } = usePostQuest();
@@ -21,11 +21,17 @@ export default function Quests(props: { quests: Quest[]; permission: Permission;
     <>
     <div className="questList">
       <div className="questFilter">
-        <input type="checkbox" checked={filterList} onChange={(evt) => setFilterList(evt.target.checked)} />Erledigte Quests
+        <input type="checkbox" checked={filterList} onChange={(evt) => {
+          setFilterList(evt.target.checked);
+          Cookies.set("filterList", `${evt.target.checked}`);
+        }} />Erledigte Quests
       </div>
       {props.permission === "edit" && (
         <div className="questFilter">
-          <input type="checkbox" checked={filterArchivedList} onChange={(evt) => setFilterArchivedList(evt.target.checked)} />Archivierte Quests
+          <input type="checkbox" checked={filterArchivedList} onChange={(evt) => {
+            setFilterArchivedList(evt.target.checked);
+            Cookies.set("filterArchivedList", `${evt.target.checked}`);
+          }} />Archivierte Quests
         </div>
       )}
       {props.quests

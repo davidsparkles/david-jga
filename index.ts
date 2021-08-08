@@ -45,74 +45,82 @@ const router = new Router();
 
 router.get("/api/data", async (ctx, next)=>{
   console.log(ctx.cookies.get("token"));
-  const client = await getClient();
-  const res = await client.query(`
-    SELECT row_to_json(d) AS data FROM (
-      SELECT
-        game_level.current_level AS "currentLevel",
-        game_level.current_xp AS "currentXp",
-        COALESCE((
-          SELECT required_xp - game_level.current_xp FROM level WHERE level.id = game_level.current_level + 1
-        ), 0) AS "xpToNextLevel",
-        COALESCE((
-          SELECT game_level.current_xp - required_xp FROM level WHERE level.id = game_level.current_level
-        ), 0) AS "xpWithinCurrentLevel",
-        COALESCE((
-          SELECT max(id) FROM level
-        ), 0) AS "maxLevel",
-        COALESCE((
-          SELECT json_agg(row_to_json(sub)) FROM (
-            SELECT
-              id,
-              disabled,
-              archived,
-              title,
-              description,
-              quest.max_xp AS "maxXp",
-              quest.xp,
-              min_level AS "minLevel",
-              CASE
-              WHEN min_level > game_level.current_level THEN 'hidden'
-              WHEN quest.xp IS NOT NULL THEN 'closed'
-              ELSE 'open'
-              END AS state,
-              COALESCE ((
-                SELECT json_agg(row_to_json(sub_version)) FROM (
-                  SELECT * FROM quest_version WHERE quest_version.quest_id = quest.id ORDER BY created_at DESC
-                ) AS sub_version
-              ), '[]'::json) AS versions
-            FROM quest
-            ORDER BY quest.min_level ASC, quest.title ASC
-            ) sub
-        ), '[]'::json) AS quests,
-        COALESCE((
-          SELECT json_agg(row_to_json(sub_level)) FROM (
-            SELECT
-              id,
-              required_xp AS "requiredXp"
-            FROM level
-            ORDER BY id ASC
-            ) sub_level
-        ), '[]'::json) AS levels
-      FROM (
-        SELECT max(level.id) AS current_level, COALESCE(xps.sum, 0) AS current_xp
-        FROM level
-			    LEFT JOIN LATERAL (SELECT sum(COALESCE(xp, 0)) FROM quest WHERE archived != TRUE) xps ON TRUE
-        WHERE COALESCE(xps.sum, 0) >= level.required_xp
-        GROUP BY COALESCE(xps.sum, 0)
-      ) game_level
-    ) d;
-  `, []);
+  try {
 
-  const data = res?.rows?.[0]?.data;
-  if (data != null) {
-    ctx.status = HttpStatus.OK;
-    ctx.body = data;
-  } else {
-    ctx.status = HttpStatus.NOT_FOUND;
-    ctx.body = `Data Not Found`;
+    const client = await getClient();
+    const res = await client.query(`
+      SELECT row_to_json(d) AS data FROM (
+        SELECT
+          game_level.current_level AS "currentLevel",
+          game_level.current_xp AS "currentXp",
+          COALESCE((
+            SELECT required_xp - game_level.current_xp FROM level WHERE level.id = game_level.current_level + 1
+          ), 0) AS "xpToNextLevel",
+          COALESCE((
+            SELECT game_level.current_xp - required_xp FROM level WHERE level.id = game_level.current_level
+          ), 0) AS "xpWithinCurrentLevel",
+          COALESCE((
+            SELECT max(id) FROM level
+          ), 0) AS "maxLevel",
+          COALESCE((
+            SELECT json_agg(row_to_json(sub)) FROM (
+              SELECT
+                id,
+                disabled,
+                archived,
+                title,
+                description,
+                quest.max_xp AS "maxXp",
+                quest.xp,
+                min_level AS "minLevel",
+                CASE
+                WHEN min_level > game_level.current_level THEN 'hidden'
+                WHEN quest.xp IS NOT NULL THEN 'closed'
+                ELSE 'open'
+                END AS state,
+                COALESCE ((
+                  SELECT json_agg(row_to_json(sub_version)) FROM (
+                    SELECT * FROM quest_version WHERE quest_version.quest_id = quest.id ORDER BY created_at DESC
+                  ) AS sub_version
+                ), '[]'::json) AS versions
+              FROM quest
+              ORDER BY quest.min_level ASC, quest.title ASC
+              ) sub
+          ), '[]'::json) AS quests,
+          COALESCE((
+            SELECT json_agg(row_to_json(sub_level)) FROM (
+              SELECT
+                id,
+                required_xp AS "requiredXp"
+              FROM level
+              ORDER BY id ASC
+              ) sub_level
+          ), '[]'::json) AS levels
+        FROM (
+          SELECT max(level.id) AS current_level, COALESCE(xps.sum, 0) AS current_xp
+          FROM level
+            LEFT JOIN LATERAL (SELECT sum(COALESCE(xp, 0)) FROM quest WHERE archived != TRUE) xps ON TRUE
+          WHERE COALESCE(xps.sum, 0) >= level.required_xp
+          GROUP BY COALESCE(xps.sum, 0)
+        ) game_level
+      ) d;
+    `, []);
+  
+    const data = res?.rows?.[0]?.data;
+    if (data != null) {
+      ctx.status = HttpStatus.OK;
+      ctx.body = data;
+    } else {
+      ctx.status = HttpStatus.NOT_FOUND;
+      ctx.body = `Data Not Found`;
+    }
+  } catch (err) {
+    console.log("Postgres Client Error:", JSON.stringify(err));
+    ctx.status = HttpStatus.INTERNAL_SERVER_ERROR;
+    ctx.body = "Internal Server Error - Postgres Client"
+  } finally {
+    await next();
   }
-  await next();
 });
 
 router.post("/api/quest", async (ctx, next) => {
