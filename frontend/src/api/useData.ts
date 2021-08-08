@@ -38,7 +38,7 @@ export interface Data {
 }
 
 async function getData(): Promise<Data> {
-  const res = await fetch(`${window.location.hostname === "localhost" ? "http://localhost:3000" : ""}/api/data`);
+  const res = await fetch("/api/data");
   if (res.status === 200) return res.json();
   console.error(`Fetch error: ${res.status} ${res.statusText} ${res.text()}`);
   throw new Error(res.statusText);
