@@ -57,11 +57,11 @@
 }
 
 .questPoints {
-  color: grey;
+  color: #757575;
 }
 
 .questDescription {
-  color: grey;
+  color: #757575;
   text-align: left;
   overflow: hidden;
 }
