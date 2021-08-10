@@ -1,6 +1,6 @@
 import React from "react";
 import { Link, RouteChildrenProps } from "react-router-dom";
-import { AiFillTrophy } from "react-icons/ai"
+import { AiFillTrophy, AiFillSetting } from "react-icons/ai"
 import { FaTasks } from "react-icons/fa"
 import { RiFilePaper2Fill } from "react-icons/ri"
 import "./GameFooter.css";
@@ -8,7 +8,7 @@ import { Permission } from "../permission";
 
 export default function GameFooter(props: RouteChildrenProps & { permission: Permission }): JSX.Element {
   return (
-    <div className="gameFooter" style={props.permission === "edit" ? { gridTemplateColumns: "auto auto auto" } : undefined }>
+    <div className="gameFooter" style={props.permission === "edit" ? { gridTemplateColumns: "auto auto auto auto" } : undefined }>
       <Link to={{ pathname: "/quests", search: props.location.search }}>
         <FaTasks />
       </Link>
@@ -22,6 +22,9 @@ export default function GameFooter(props: RouteChildrenProps & { permission: Per
           </Link>
         )
       }
+      <Link to={{ pathname: "/settings", search: props.location.search }}>
+        <AiFillSetting />
+      </Link>
     </div>
   );
 }
