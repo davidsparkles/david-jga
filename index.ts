@@ -1,16 +1,3 @@
-import Koa from "koa";
-import BodyParser = require("koa-bodyparser");
-import cors = require("koa-cors");
-import Logger = require("koa-logger");
-import mount = require("koa-mount");
-import Router = require("koa-router");
-import serve = require("koa-static");
-import httpStatus = require("http-status");
-import webpush = require("web-push");
-import { getClient } from "./src/getClient";
-import * as crud from "./src/crud";
-import * as pushSubscription from "./src/subscriptionHandler";
-
 import dotenv = require('dotenv');
 dotenv.config();
 
@@ -18,10 +5,20 @@ process.on("unhandledRejection", (reason, p) => {
   console.warn("Unhandled Rejection at: Promise", p, "reason:", reason);
 });
 
+import Koa from "koa";
+import BodyParser = require("koa-bodyparser");
+import cors = require("koa-cors");
+import Logger = require("koa-logger");
+import mount = require("koa-mount");
+import Router = require("koa-router");
+import serve = require("koa-static");
+import * as crud from "./src/crud";
+import * as pushSubscription from "./src/subscriptionHandler";
+
 
 const app = new Koa();
 
-const REACT_ROUTER_PATHS = ["/quests", "/rewards", "/levels"];
+const REACT_ROUTER_PATHS = ["/quests", "/rewards", "/levels", "/settings"];
 
 const static_pages = new Koa();
 static_pages.use(serve(__dirname + "/frontend/build")); //serve the build directory

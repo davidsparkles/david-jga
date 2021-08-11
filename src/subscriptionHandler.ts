@@ -6,7 +6,7 @@ import { getClient } from "./getClient";
 
 const vapidKeys = {
   publicKey: "BDTxsv_QJLLjMkKfKrZw9kLADmciH2_E1B4Smkp9kbOLHWlrNs_3jFZA3zCyYbw9GRKq5hoEhkcHiBMf8OiGKDQ",
-  privateKey: "p_3UVVPDmeJA6L_DuJFoktw-EEh8dqcvoXarhx1FJlI"
+  privateKey: process.env.PRIVATE_VAPID_KEY
 };
 
 webpush.setVapidDetails("mailto:david.sparkles@posteo.de", vapidKeys.publicKey, vapidKeys.privateKey);

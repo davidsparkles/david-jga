@@ -3,12 +3,15 @@ import { Link, RouteChildrenProps } from "react-router-dom";
 import { AiFillTrophy, AiFillSetting } from "react-icons/ai"
 import { FaTasks } from "react-icons/fa"
 import { RiFilePaper2Fill } from "react-icons/ri"
+import { useAppSelector } from "../model/hooks";
+import { selectPermission } from "../model/permissionReducer";
 import "./GameFooter.css";
-import { Permission } from "../permission";
 
-export default function GameFooter(props: RouteChildrenProps & { permission: Permission }): JSX.Element {
+export default function GameFooter(props: RouteChildrenProps): JSX.Element {
+  const permission = useAppSelector(selectPermission);
+
   return (
-    <div className="gameFooter" style={props.permission === "edit" ? { gridTemplateColumns: "auto auto auto auto" } : undefined }>
+    <div className="gameFooter" style={permission === "edit" ? { gridTemplateColumns: "auto auto auto auto" } : undefined }>
       <Link to={{ pathname: "/quests", search: props.location.search }}>
         <FaTasks />
       </Link>
@@ -16,7 +19,7 @@ export default function GameFooter(props: RouteChildrenProps & { permission: Per
         <AiFillTrophy />
       </Link>
       {
-        props.permission === "edit" && (
+        permission === "edit" && (
           <Link to={{ pathname: "/levels", search: props.location.search }}>
             <RiFilePaper2Fill />
           </Link>

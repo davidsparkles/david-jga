@@ -2,11 +2,14 @@ import React, { useState } from "react";
 import Cookies from "js-cookie";
 import { Quest } from "../api/useData";
 import { usePostQuest } from "../api/usePostQuest";
-import { Permission } from "../permission";
+import { useAppSelector } from "../model/hooks";
+import { selectPermission } from "../model/permissionReducer";
 import QuestDetails from "./QuestDetails";
 import "./Quests.css";
 
-export default function Quests(props: { quests: Quest[]; permission: Permission; refetch: () => void }): JSX.Element {
+export default function Quests(props: { quests: Quest[]; refetch: () => void }): JSX.Element {
+  const permission = useAppSelector(selectPermission);
+
   const [filterList, setFilterList] = useState<boolean>(Cookies.get("filterList") != null ? Cookies.get("filterList") === "true" : true);
   const [filterArchivedList, setFilterArchivedList] = useState<boolean>(Cookies.get("filterArchivedList") != null ? Cookies.get("filterArchivedList") === "true" : false);
   const [selectedQuest, setSelectedQuest] = useState<Quest | null>(null);
@@ -14,7 +17,7 @@ export default function Quests(props: { quests: Quest[]; permission: Permission;
   const { loading, error, post } = usePostQuest();
 
   if (selectedQuest != null) {
-    return <QuestDetails quest={selectedQuest} onBack={() => { setSelectedQuest(null); props.refetch() }} permission={props.permission} />;
+    return <QuestDetails quest={selectedQuest} onBack={() => { setSelectedQuest(null); props.refetch() }} />;
   }
 
   return (
@@ -26,7 +29,7 @@ export default function Quests(props: { quests: Quest[]; permission: Permission;
           Cookies.set("filterList", `${evt.target.checked}`);
         }} />Erledigte Quests
       </div>
-      {props.permission === "edit" && (
+      {permission === "edit" && (
         <div className="questFilter">
           <input type="checkbox" checked={filterArchivedList} onChange={(evt) => {
             setFilterArchivedList(evt.target.checked);
@@ -37,15 +40,15 @@ export default function Quests(props: { quests: Quest[]; permission: Permission;
       {props.quests
         .filter(({ state }) => filterList === true ? true : state !== "closed")
         .filter(({ archived }) => filterArchivedList === true ? true : archived === false)
-        .filter(({ archived, disabled }) => (archived === false && disabled === false) || props.permission === "edit")
+        .filter(({ archived, disabled }) => (archived === false && disabled === false) || permission === "edit")
         .map((quest, index) => (
           <div
             key={index}
             className={`questBox ${quest.state} ${quest.disabled ? "disabled" : ""} ${quest.archived ? "archived" : ""}`}
-            onClick={() => !(props.permission === "none" && quest.state === "hidden") && setSelectedQuest(quest)}
+            onClick={() => !(permission === "none" && quest.state === "hidden") && setSelectedQuest(quest)}
           >
             <div className="questHeader">
-              <div className="questTitle">{(props.permission === "none" && quest.state === "hidden") || quest.title == null ? "🔒 ???" : `${quest.state === "hidden" ? "🔒 " : ""}${quest.title}`}</div>
+              <div className="questTitle">{(permission === "none" && quest.state === "hidden") || quest.title == null ? "🔒 ???" : `${quest.state === "hidden" ? "🔒 " : ""}${quest.title}`}</div>
               <div className="questPoints">
                 {
                   quest.state !== "closed" ? quest.maxXp : `${quest.xp} / ${quest.maxXp}`
@@ -53,7 +56,7 @@ export default function Quests(props: { quests: Quest[]; permission: Permission;
               </div>
             </div>
             {
-              !(props.permission === "none" && quest.state === "hidden") && <div className="questDescription">{formatDescription(quest.description ?? "???")}</div>
+              !(permission === "none" && quest.state === "hidden") && <div className="questDescription">{formatDescription(quest.description ?? "???")}</div>
             }
             {
               quest.state === "hidden" && <div className="questDescription">Ab Level {quest.minLevel}</div>
@@ -61,7 +64,7 @@ export default function Quests(props: { quests: Quest[]; permission: Permission;
           </div>
       ))}
     </div>
-    {props.permission === "edit" && (
+    {permission === "edit" && (
       <div style={{ display: "grid", gridTemplateColumns: "auto auto auto" }}>
         <div className="createQuestContainer">
           <button onClick={async () => {

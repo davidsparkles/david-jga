@@ -4,14 +4,13 @@ import { useData } from "../api/useData";
 import Quests from "./Quests";
 import GameHeader from "./GameHeader";
 import GameFooter from "./GameFooter";
-import { Permission } from "../permission";
 import usePushNotifications from "../usePushNotifications";
 import Levels from "./Levels";
 import Rewards from "./Rewards";
 import Settings from "./Settings";
 import "./Game.css";
 
-export default function Game(props: { permission: Permission }): JSX.Element {
+export default function Game(props: object): JSX.Element {
   const { data, error, loading, refetch } = useData();
   const {
     userConsent,
@@ -42,14 +41,13 @@ export default function Game(props: { permission: Permission }): JSX.Element {
                   <Levels levels={data.levels} />
                 </Route>
                 <Route path="/quests">
-                  <Quests quests={data.quests} permission={props.permission} refetch={refetch} />
+                  <Quests quests={data.quests} refetch={refetch} />
                 </Route>
                 <Route path="/rewards">
-                  <Rewards permission={props.permission} refetch={refetch} />
+                  <Rewards refetch={refetch} />
                 </Route>
                 <Route path="/settings">
                   <Settings
-                    permission={props.permission}
                     userConsent={userConsent}
                     onClickAskUserPermission={onClickAskUserPermission}
                     onClickSusbribeToPushNotification={onClickSusbribeToPushNotification}
@@ -63,7 +61,7 @@ export default function Game(props: { permission: Permission }): JSX.Element {
           )
         }
       </div>
-      <Route path="/" component={(p: any): JSX.Element => <GameFooter {...p} permission={props.permission} />} />
+      <Route path="/" component={GameFooter} />
     </div>
   );
 }

@@ -2,7 +2,8 @@ import React, { useCallback, useEffect, useState } from "react";
 import { BiArrowBack } from "react-icons/bi";
 import { Quest } from "../api/useData";
 import { usePostQuest } from "../api/usePostQuest";
-import { Permission } from "../permission";
+import { useAppSelector } from "../model/hooks";
+import { selectPermission } from "../model/permissionReducer";
 import "./QuestDetails.css";
 
 interface Values {
@@ -15,8 +16,9 @@ interface Values {
   archived: boolean;
 }
 
-export default function QuestDetails(props: { quest: Quest; onBack: () => void; permission: Permission }): JSX.Element {
-  const { quest, onBack, permission } = props;
+export default function QuestDetails(props: { quest: Quest; onBack: () => void }): JSX.Element {
+  const { quest, onBack } = props;
+  const permission = useAppSelector(selectPermission);
 
   const [values, setValues] = useState<Values>({ title: "", description: "", maxXp: 0, minLevel: 0, xp: null, disabled: false, archived: false });
 

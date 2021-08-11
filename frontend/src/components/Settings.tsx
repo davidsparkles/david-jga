@@ -1,8 +1,8 @@
 import React from "react";
-import { Permission } from "../permission";
+import { useAppSelector, useAppDispatch } from "../model/hooks";
+import { selectToken, selectPermission, changeToken } from "../model/permissionReducer";
 
 export default function Settings(props: {
-  permission: Permission;
   userConsent: "default" | "denied" | "granted";
   onClickAskUserPermission: () => Promise<void>;
   onClickSusbribeToPushNotification: () => Promise<void>;
@@ -10,6 +10,10 @@ export default function Settings(props: {
   loading: boolean;
   error: any;
 }): JSX.Element {
+  const token = useAppSelector(selectToken);
+  const permission = useAppSelector(selectPermission);
+  const dispatch = useAppDispatch();
+
   return (
     <div>
       <h2>Einstellungen</h2>
@@ -20,12 +24,20 @@ export default function Settings(props: {
       <Loading loading={props.loading} />
       <Error error={props.error} />
       {
-        props.permission === "edit" && (
-        <div>
-          <button onClick={props.onClickSendNotification}>Send a notification</button>
-        </div>
+        permission === "edit" && (
+          <>
+            <div>
+              <button onClick={props.onClickSendNotification}>Send a notification</button>
+            </div>
+          </>
         )
       }
+      <div>
+        Berechtigung: {permission}
+      </div>
+      <div>
+        Token: <input value={token} onChange={(evt) => dispatch(changeToken(evt.target.value))} />
+      </div>
     </div>
   )
 }

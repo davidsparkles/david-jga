@@ -1,16 +1,20 @@
 import React from 'react';
+import { Provider } from "react-redux";
 import ReactDOM from 'react-dom';
-import './index.css';
+import { BrowserRouter, Redirect, Route } from 'react-router-dom';
+import store from "./model/store";
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { BrowserRouter, Redirect, Route } from 'react-router-dom';
+import './index.css';
 
 ReactDOM.render(
   <React.StrictMode>
-    <BrowserRouter>
-      <Route path="/" exact component={() => <Redirect to="/quests" />} />
-      <App />
-    </BrowserRouter>
+    <Provider store={store}>
+      <BrowserRouter>
+        <Route path="/" exact component={() => <Redirect to="/quests" />} />
+        <App />
+      </BrowserRouter>
+    </Provider>
   </React.StrictMode>,
   document.getElementById('root')
 );
