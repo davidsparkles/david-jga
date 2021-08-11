@@ -1,10 +1,10 @@
 import React, { useEffect } from "react";
 import { Route, Switch } from "react-router-dom";
 import { useData } from "../api/useData";
-import Quests from "./Quests";
 import GameHeader from "./GameHeader";
 import GameFooter from "./GameFooter";
 import usePushNotifications from "../usePushNotifications";
+import QuestsPage from "./QuestsPage";
 import Levels from "./Levels";
 import Rewards from "./Rewards";
 import Settings from "./Settings";
@@ -41,7 +41,7 @@ export default function Game(props: object): JSX.Element {
                   <Levels levels={data.levels} />
                 </Route>
                 <Route path="/quests">
-                  <Quests quests={data.quests} refetch={refetch} />
+                  <QuestsPage quests={data.quests} refetch={refetch} />
                 </Route>
                 <Route path="/rewards">
                   <Rewards refetch={refetch} />

@@ -1,10 +1,9 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { BiArrowBack } from "react-icons/bi";
-import { Quest } from "../api/useData";
-import { usePostQuest } from "../api/usePostQuest";
-import { useAppSelector } from "../model/hooks";
-import { selectPermission } from "../model/permissionReducer";
-import "./QuestDetails.css";
+import { Quest } from "../../api/useData";
+import { usePostQuest } from "../../api/usePostQuest";
+import { useAppSelector } from "../../model/hooks";
+import { selectPermission } from "../../model/permissionReducer";
 
 interface Values {
   title: string;

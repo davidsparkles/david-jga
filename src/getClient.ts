@@ -1,12 +1,9 @@
-import { Client } from "pg";
+import { PoolClient, Pool } from "pg";
 
-let client: Client;
+let pool: Pool;
 
-export async function getClient(): Promise<Client> {
-  if (client) return client;
-  client = new Client({
-    connectionString: process.env.DATABASE_URL
-  });
-  await client.connect();
+export async function getClient(): Promise<PoolClient> {
+  if (pool == null) pool = new Pool({ connectionString: process.env.DATABASE_URL });
+  const client = await pool.connect();
   return client;
 }

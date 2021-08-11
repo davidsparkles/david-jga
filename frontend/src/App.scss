@@ -1,0 +1,139 @@
+$main-color: black;
+$secondary-color: #3D3D3D;
+$danger-color: rgb(206, 3, 64);
+
+.app {
+  text-align: center;
+  color: $main-color;
+}
+
+.questList {
+  display: grid;
+  grid-auto-flow: row;
+  height: 100%;
+  margin: 0 12px 0 12px;
+
+  .questFilter {
+    text-align: right;
+    font-size: 0.8em;
+  }
+  
+  .questBox {
+    border: 1px solid black;
+    border-radius: 3px;
+    margin: 8px 0;
+    padding: 6px 6px;
+  
+    &:hover {
+      border-width: 2px;
+      padding: 5px 5px;
+    }
+  
+    &.open {
+      cursor: pointer;
+    }
+  
+    &.closed {
+      background-color: lightgreen;
+      cursor: pointer;
+    }
+  
+    &.hidden {
+      background-color: lightgray;
+    }
+  
+    &.disabled {
+      border-color: $danger-color;
+    }
+  
+    &.archived {
+      border-color: $danger-color;
+      background-color: $danger-color;
+    }
+  
+    .questHeader {
+      display: grid;
+      grid-template-columns: 75% 25%;
+      padding: 2px 4px 18px 4px;
+    
+      .questTitle {
+        text-align: left;
+        font-size: 1.2em;
+      }
+    }
+  
+    .questPoints {
+      color: $secondary-color;
+    }
+  
+    .questDescription {
+      color: $secondary-color;
+      text-align: left;
+      overflow: hidden;
+    }
+  }
+  
+  .createQuestContainer {
+    margin: 0 12px 24px 12px;
+    text-align: left;
+  }
+}
+
+
+.questDetails {
+  margin: 0 0 12px 0;
+
+  .backArrowContainer {
+    padding: 0px 4px 6px 4px;
+    margin-bottom: 12px;
+    text-align: left;
+    box-shadow: 1px 1px 1px black;
+    display: grid;
+    grid-template-columns: 40px 1fr;
+  }
+
+  .backArrow {
+    width: 2em;
+    height: 100%;
+    cursor: pointer;
+  }
+
+  .label {
+    text-align: left;
+    margin: 6px 4px;
+  }
+
+  .value {
+    background-color: rgb(245, 245, 245);
+    margin: 4px 8px 8px 8px;
+    border: 1px rgb(235, 234, 234) solid;
+    padding: 4px 8px;
+    text-align: left;
+
+    textarea {
+      width: 100%;
+    }
+
+    input {
+      width: 100%;
+    }
+  }
+
+  .buttonContainer {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  h4 {
+    padding-left: 12px;
+    margin-bottom: 6px;
+    text-align: left;
+  }
+
+  .versionList {
+    padding-left: 12px;
+    text-align: left;
+  }
+}
+
+

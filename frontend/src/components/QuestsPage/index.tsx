@@ -1,13 +1,12 @@
 import React, { useState } from "react";
 import Cookies from "js-cookie";
-import { Quest } from "../api/useData";
-import { usePostQuest } from "../api/usePostQuest";
-import { useAppSelector } from "../model/hooks";
-import { selectPermission } from "../model/permissionReducer";
+import { Quest } from "../../api/useData";
+import { usePostQuest } from "../../api/usePostQuest";
+import { useAppSelector } from "../../model/hooks";
+import { selectPermission } from "../../model/permissionReducer";
 import QuestDetails from "./QuestDetails";
-import "./Quests.css";
 
-export default function Quests(props: { quests: Quest[]; refetch: () => void }): JSX.Element {
+export default function QuestsPage(props: { quests: Quest[]; refetch: () => void }): JSX.Element {
   const permission = useAppSelector(selectPermission);
 
   const [filterList, setFilterList] = useState<boolean>(Cookies.get("filterList") != null ? Cookies.get("filterList") === "true" : true);
@@ -65,51 +64,13 @@ export default function Quests(props: { quests: Quest[]; refetch: () => void }):
       ))}
     </div>
     {permission === "edit" && (
-      <div style={{ display: "grid", gridTemplateColumns: "auto auto auto" }}>
-        <div className="createQuestContainer">
-          <button onClick={async () => {
-            await post({ title: "Neue Quest", description: "", maxXp: 1, disabled: true, minLevel: 20, archived: false });
-            props.refetch();
-          }}>
-            Neue Quest
-          </button>
-        </div>
-        <div>
-          <button onClick={() => {
-            // Let's check if the browser supports notifications
-            if (!("Notification" in window)) {
-              alert("This browser does not support desktop notification");
-            }
-
-            // Let's check whether notification permissions have already been granted
-            else if (Notification.permission === "granted") {
-              // If it's okay let's create a notification
-              setTimeout(() => new Notification("Unlocked next level 2!"), 3000);
-            }
-
-            // Otherwise, we need to ask the user for permission
-            else if (Notification.permission !== "denied") {
-              Notification.requestPermission().then(function (permission) {
-                // If the user accepts, let's create a notification
-                if (permission === "granted") {
-                  setTimeout(() => new Notification("Unlocked next level 2!"), 3000);
-                }
-              });
-            }
-
-            // At last, if the user has denied notifications, and you
-            // want to be respectful there is no need to bother them any more.
-          }}>
-            Notify me in 3 secs!
-          </button>
-        </div>
-        <div>
-          <button onClick={() => {
-            Cookies.remove("token");
-          }}>
-            Log Out!
-          </button>
-        </div>
+      <div className="createQuestContainer">
+        <button onClick={async () => {
+          await post({ title: "Neue Quest", description: "", maxXp: 1, disabled: true, minLevel: 20, archived: false });
+          props.refetch();
+        }}>
+          Neue Quest
+        </button>
       </div>
     )}
     {loading && "loading ..."}

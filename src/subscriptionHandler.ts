@@ -36,6 +36,7 @@ async function subscribe(pushSubscription: webpush.PushSubscription): Promise<st
     DO UPDATE SET updated_at = now(), unsubscribed_at = NULL WHERE push_subscription.id = $1;
   `, [subscriptionId, JSON.stringify(pushSubscription)]);
   console.log("New subscription: ", subscriptionId);
+  client.release();
   return subscriptionId;
 }
 
@@ -56,16 +57,19 @@ async function unsubscribe(subscriptionId: string): Promise<string> {
   const client = await getClient();
   await client.query("UPDATE push_subscription SET unsubscribed_at = now() WHERE id = $1;", [subscriptionId]);
   console.log("Unsubscribed: ", subscriptionId);
+  client.release();
   return subscriptionId;
 }
 
 async function getPushSubscriptions(): Promise<Array<{ id: string; pushSubscription: webpush.PushSubscription }>> {
   const client = await getClient();
-  return (await client.query(`
+  const result = (await client.query(`
     SELECT id, push_subscription_payload AS "pushSubscription"
     FROM push_subscription
     WHERE unsubscribed_at IS NULL;
   `, []))?.rows;
+  client.release();
+  return result;
 }
 
 export async function handleSendPushNotification(ctx: ParameterizedContext, next) {

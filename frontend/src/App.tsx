@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import Game from "./components/Game";
 import { useAppDispatch } from "./model/hooks";
 import { changeToken } from "./model/permissionReducer";
-import "./App.css";
+import "./App.scss";
 
 export default function App() {
   const dispatch = useAppDispatch();

@@ -7,17 +7,23 @@ export async function updateLevels(ctx: ParameterizedContext, next): Promise<voi
   console.log("Received values: ", JSON.stringify(levels));
 
   const client = await getClient();
-  await client.query("DELETE FROM level;");
-  for (const level of levels) {
-    await client.query(
-      `INSERT INTO level (id, required_xp) VALUES ($1, $2) ON CONFLICT ON CONSTRAINT level_pkey DO UPDATE SET required_xp = $2;`,
-      [level.id, level.requiredXp]
-    );
-    console.log(`Level upserted ${level.id}`);
+  try {
+    await client.query("DELETE FROM level;");
+    for (const level of levels) {
+      await client.query(
+        `INSERT INTO level (id, required_xp) VALUES ($1, $2) ON CONFLICT ON CONSTRAINT level_pkey DO UPDATE SET required_xp = $2;`,
+        [level.id, level.requiredXp]
+      );
+      console.log(`Level upserted ${level.id}`);
+    }
+    ctx.response.status = httpStatus.CREATED;
+  } catch (err) {
+    ctx.response.status = httpStatus.INTERNAL_SERVER_ERROR;
+    console.log("Error updating levels: ", err);
+  } finally {
+    client.release();
+    next();
   }
-
-  ctx.response.status = httpStatus.CREATED;
-  next();
 }
 
 export async function updateQuest(ctx: ParameterizedContext, next): Promise<void> {
@@ -25,31 +31,37 @@ export async function updateQuest(ctx: ParameterizedContext, next): Promise<void
   console.log("Received values: ", JSON.stringify(values));
 
   const client = await getClient();
-  if (values.delete === true) {
-    await client.query(`DELETE FROM quest WHERE id = $1`, [values.id]);
-    console.log(`Deleted quest ${values.id}`);
-  } else if (values.id != null) {
-    await client.query(
-      `UPDATE quest SET title=$2, description=$3, max_xp = $4, min_level = $5, xp = $6, disabled = $7, archived = $8 WHERE id = $1;`,
-      [values.id, values.title, values.description, values.maxXp, values.minLevel, values.xp, values.disabled, values.archived]
-    );
-    console.log(`Updated quest ${values.id}`);
-  } else {
-    await client.query(
-      `INSERT INTO quest (title, description, max_xp, min_level, disabled, archived) VALUES ($1, $2, $3, $4, $5, $6);`,
-      [values.title, values.description, values.maxXp, values.minLevel, values.disabled, values.archived]
-    );
-    console.log(`Created new quest ${values.title}`);
+  try {
+    if (values.delete === true) {
+      await client.query(`DELETE FROM quest WHERE id = $1`, [values.id]);
+      console.log(`Deleted quest ${values.id}`);
+    } else if (values.id != null) {
+      await client.query(
+        `UPDATE quest SET title=$2, description=$3, max_xp = $4, min_level = $5, xp = $6, disabled = $7, archived = $8 WHERE id = $1;`,
+        [values.id, values.title, values.description, values.maxXp, values.minLevel, values.xp, values.disabled, values.archived]
+      );
+      console.log(`Updated quest ${values.id}`);
+    } else {
+      await client.query(
+        `INSERT INTO quest (title, description, max_xp, min_level, disabled, archived) VALUES ($1, $2, $3, $4, $5, $6);`,
+        [values.title, values.description, values.maxXp, values.minLevel, values.disabled, values.archived]
+      );
+      console.log(`Created new quest ${values.title}`);
+    }
+  
+    ctx.response.status = httpStatus.CREATED;
+  } catch (err) {
+    ctx.response.status = httpStatus.INTERNAL_SERVER_ERROR;
+    console.log("Error updating quest: ", err);
+  } finally {
+    client.release();
+    next();
   }
-
-  ctx.response.status = httpStatus.CREATED;
-  next();
 }
 
 export async function getData(ctx: ParameterizedContext, next): Promise<void> {
-  console.log(ctx.cookies.get("token"));
+  const client = await getClient();
   try {
-    const client = await getClient();
     const res = await client.query(`
       SELECT row_to_json(d) AS data FROM (
         SELECT
@@ -121,6 +133,7 @@ export async function getData(ctx: ParameterizedContext, next): Promise<void> {
     ctx.status = httpStatus.INTERNAL_SERVER_ERROR;
     ctx.body = "Internal Server Error - Postgres Client"
   } finally {
-    await next();
+    client.release();
+    next();
   }
 }
