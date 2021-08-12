@@ -1,9 +1,9 @@
 $main-color: black;
 $secondary-color: #3D3D3D;
 $danger-color: rgb(206, 3, 64);
+$hidden-background-color: lightgray;
 
 .app {
-  text-align: center;
   color: $main-color;
 }
 
@@ -39,7 +39,7 @@ $danger-color: rgb(206, 3, 64);
     }
   
     &.hidden {
-      background-color: lightgray;
+      background-color: $hidden-background-color;
     }
   
     &.disabled {
@@ -57,7 +57,6 @@ $danger-color: rgb(206, 3, 64);
       padding: 2px 4px 18px 4px;
     
       .questTitle {
-        text-align: left;
         font-size: 1.2em;
       }
     }
@@ -68,14 +67,25 @@ $danger-color: rgb(206, 3, 64);
   
     .questDescription {
       color: $secondary-color;
-      text-align: left;
       overflow: hidden;
     }
   }
-  
-  .createQuestContainer {
-    margin: 0 12px 24px 12px;
-    text-align: left;
+}
+ 
+.createQuestContainer {
+  margin: 8px 12px 0 12px;
+
+  button {
+    width: 100%;
+    height: 4em;
+    margin-bottom: 10px;
+    background-color: $hidden-background-color;
+    color: $secondary-color;
+    // font-weight: bold;
+    font-size: 1.5em;
+    border: 1px dashed black;
+    border-radius: 3px;
+    box-shadow: none;
   }
 }
 
@@ -86,7 +96,6 @@ $danger-color: rgb(206, 3, 64);
   .backArrowContainer {
     padding: 0px 4px 6px 4px;
     margin-bottom: 12px;
-    text-align: left;
     box-shadow: 1px 1px 1px black;
     display: grid;
     grid-template-columns: 40px 1fr;
@@ -99,7 +108,6 @@ $danger-color: rgb(206, 3, 64);
   }
 
   .label {
-    text-align: left;
     margin: 6px 4px;
   }
 
@@ -108,7 +116,6 @@ $danger-color: rgb(206, 3, 64);
     margin: 4px 8px 8px 8px;
     border: 1px rgb(235, 234, 234) solid;
     padding: 4px 8px;
-    text-align: left;
 
     textarea {
       width: 100%;
@@ -127,12 +134,10 @@ $danger-color: rgb(206, 3, 64);
   h4 {
     padding-left: 12px;
     margin-bottom: 6px;
-    text-align: left;
   }
 
   .versionList {
     padding-left: 12px;
-    text-align: left;
   }
 }
 

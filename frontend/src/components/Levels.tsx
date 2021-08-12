@@ -28,7 +28,7 @@ export default function Levels(props: { levels: Level[] }): JSX.Element {
 
   return (
     <div className="levels">
-      <b>Levels</b>
+      <h2>Levels</h2>
       {values.map((requiredXp, index) => (
         <div className="levelsContainer">
           <div className="levelIndex">{index + 1}</div>
