@@ -1,10 +1,13 @@
 import React from "react";
-import { useGetRewardsQuery } from "../../model/services/rewards";
+import { useSelector } from "react-redux";
 import Loading from "../../components/Loading";
 import NoData from "../../components/NoData";
+import { useGetRewardsQuery } from "../../model/services/rewards";
+import { selectPermission } from "../../model/permissionReducer";
 import "./styles.scss";
 
 export default function Rewards(props: { refetch: () => void }): JSX.Element {
+  const permission = useSelector(selectPermission);
   const { data, error, isLoading } = useGetRewardsQuery(undefined);
 
   return (
@@ -19,7 +22,7 @@ export default function Rewards(props: { refetch: () => void }): JSX.Element {
               data?.map((item, index) => (
                 <li key={index} className={`reward-item ${item.disabled === true ? "disabled" : "enabled"} ${item.locked === true ? "locked" : "unlocked"}`}>
                   <div className="title">
-                    {item.title}
+                    {item.title}{permission === "edit" && <> ({item.id})</>}
                   </div>
                   <div className="description">
                     {item.description}

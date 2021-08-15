@@ -5,7 +5,7 @@
   overflow: hidden;
   color: #333;
   background-color: white;
-  padding: 12px 21px;
+  padding: 12px 21px 18px 21px;
   border-bottom: 3px black solid;
   display: grid;
   grid-template-columns: 50% 50%;
