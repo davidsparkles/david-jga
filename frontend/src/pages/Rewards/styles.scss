@@ -1,0 +1,43 @@
+$main-color: black;
+$secondary-color: #3D3D3D;
+$danger-color: rgb(206, 3, 64);
+$hidden-background-color: lightgray;
+
+.rewards-list {
+  list-style: none;
+  padding-left: 0;
+
+  .reward-item {
+    border: 1px solid black;
+    border-radius: 3px;
+    margin: 8px 0;
+    padding: 6px 6px;
+
+    &.locked {
+      background-color: $hidden-background-color;
+    }
+
+    &.unlocked {
+      cursor: pointer;
+    }
+
+    &.disabled {
+      border-color: $danger-color;
+    }
+
+    .title {
+      font-size: 1.2em;
+      padding: 2px 4px 18px 4px;
+    }
+
+    .description {
+      color: $secondary-color;
+      overflow: hidden;
+    }
+
+    .min-level {
+      color: $secondary-color;
+      margin-top: 8px;
+    }
+  }
+}
