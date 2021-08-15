@@ -1,6 +1,6 @@
 import Cookies from "js-cookie";
 import React, { useEffect } from "react";
-import Game from "./components/Game";
+import Game from "./pages/Game";
 import { useAppDispatch } from "./model/hooks";
 import { changeToken } from "./model/permissionReducer";
 import "./App.scss";

@@ -5,8 +5,9 @@ import { usePostQuest } from "../../api/usePostQuest";
 import { useAppSelector } from "../../model/hooks";
 import { selectPermission } from "../../model/permissionReducer";
 import QuestDetails from "./QuestDetails";
+import "./styles.scss";
 
-export default function QuestsPage(props: { quests: Quest[]; refetch: () => void }): JSX.Element {
+export default function Quests(props: { quests: Quest[]; refetch: () => void }): JSX.Element {
   const permission = useAppSelector(selectPermission);
 
   const [filterList, setFilterList] = useState<boolean>(Cookies.get("filterList") != null ? Cookies.get("filterList") === "true" : true);

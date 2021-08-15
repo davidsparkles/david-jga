@@ -137,3 +137,28 @@ export async function getData(ctx: ParameterizedContext, next): Promise<void> {
     next();
   }
 }
+
+export async function getRewards(ctx: ParameterizedContext, next): Promise<void> {
+  const client = await getClient();
+  try {
+    const res = await client.query(`
+      SELECT *, min_level AS "minLevel", current_level() < min_level AS "locked" FROM public.reward;
+    `, []);
+  
+    const data = res?.rows;
+    if (data != null) {
+      ctx.status = httpStatus.OK;
+      ctx.body = data;
+    } else {
+      ctx.status = httpStatus.NOT_FOUND;
+      ctx.body = `Data Not Found`;
+    }
+  } catch (err) {
+    console.log("Postgres Client Error:", JSON.stringify(err));
+    ctx.status = httpStatus.INTERNAL_SERVER_ERROR;
+    ctx.body = "Internal Server Error - Postgres Client"
+  } finally {
+    client.release();
+    next();
+  }
+}

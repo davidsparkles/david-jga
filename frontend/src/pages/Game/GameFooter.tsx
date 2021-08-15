@@ -3,8 +3,8 @@ import { Link, RouteChildrenProps } from "react-router-dom";
 import { AiFillTrophy, AiFillSetting } from "react-icons/ai"
 import { FaTasks } from "react-icons/fa"
 import { RiFilePaper2Fill } from "react-icons/ri"
-import { useAppSelector } from "../model/hooks";
-import { selectPermission } from "../model/permissionReducer";
+import { useAppSelector } from "../../model/hooks";
+import { selectPermission } from "../../model/permissionReducer";
 import "./GameFooter.css";
 
 export default function GameFooter(props: RouteChildrenProps): JSX.Element {

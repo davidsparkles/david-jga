@@ -1,0 +1,16 @@
+.settings {
+  padding-left: 8px;
+
+  .custom-notification {
+    margin-top: 8px;
+  }
+
+  .permission {
+    margin-top: 24px;
+    margin-bottom: 12px;
+
+    &span {
+      font-weight: bold;
+    }
+  }
+}

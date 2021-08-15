@@ -27,8 +27,9 @@ export const permissionSlice = createSlice({
       const token = action.payload;
       state.token = token;
 
-      console.log("change cookie to", token);
-      Cookies.set("token", token, { sameSite: "lax", expires: 30 });
+      if (Cookies.get("token") !== token) {
+        Cookies.set("token", token, { sameSite: "lax", expires: 30 });
+      }
 
       switch (token) {
         case EDIT_TOKEN:

@@ -1,14 +1,14 @@
 import React, { useEffect } from "react";
 import { Route, Switch } from "react-router-dom";
-import { useData } from "../api/useData";
+import { useData } from "../../api/useData";
 import GameHeader from "./GameHeader";
 import GameFooter from "./GameFooter";
-import usePushNotifications from "../usePushNotifications";
-import QuestsPage from "./QuestsPage";
-import Levels from "./Levels";
-import Rewards from "./Rewards";
-import Settings from "./Settings";
-import "./Game.css";
+import usePushNotifications from "../../push-notification/usePushNotifications";
+import Quests from "../Quests";
+import Levels from "../Levels";
+import Rewards from "../Rewards";
+import Settings from "../Settings";
+import "./styles.scss";
 
 export default function Game(props: object): JSX.Element {
   const { data, error, loading, refetch } = useData();
@@ -31,7 +31,7 @@ export default function Game(props: object): JSX.Element {
   return (
     <div className="game">
       <GameHeader data={data} />
-      <div className="gameMain">
+      <div className="game-main">
         {loading && <>Laden ...</>}
         {error && <>{typeof error === "string" ? error : JSON.stringify(error)}</>}
         {data && (
@@ -41,7 +41,7 @@ export default function Game(props: object): JSX.Element {
                   <Levels levels={data.levels} />
                 </Route>
                 <Route path="/quests">
-                  <QuestsPage quests={data.quests} refetch={refetch} />
+                  <Quests quests={data.quests} refetch={refetch} />
                 </Route>
                 <Route path="/rewards">
                   <Rewards refetch={refetch} />

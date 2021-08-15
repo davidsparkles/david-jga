@@ -1,6 +1,6 @@
 import React from "react";
-import { useAppSelector, useAppDispatch } from "../model/hooks";
-import { selectToken, selectPermission, changeToken } from "../model/permissionReducer";
+import { useAppSelector, useAppDispatch } from "../../model/hooks";
+import { selectToken, selectPermission, changeToken } from "../../model/permissionReducer";
 
 export default function Settings(props: {
   userConsent: "default" | "denied" | "granted";
@@ -15,9 +15,9 @@ export default function Settings(props: {
   const dispatch = useAppDispatch();
 
   return (
-    <div>
+    <div className="settings">
       <h2>Einstellungen</h2>
-      <input type="checkbox" checked={props.userConsent === "granted"} onChange={async () => {
+      <input className="push" type="checkbox" checked={props.userConsent === "granted"} onChange={async () => {
         await props.onClickAskUserPermission();
         await props.onClickSusbribeToPushNotification();
       }} />Push-Benachrichtigungen
@@ -26,16 +26,16 @@ export default function Settings(props: {
       {
         permission === "edit" && (
           <>
-            <div>
+            <div className="custom-notification">
               <button onClick={props.onClickSendNotification}>Send a notification</button>
             </div>
           </>
         )
       }
-      <div>
-        Berechtigung: {permission}
+      <div className="permission">
+        <span>Berechtigung:</span> {permission}
       </div>
-      <div>
+      <div className="token">
         Token: <input value={token} onChange={(evt) => dispatch(changeToken(evt.target.value))} />
       </div>
     </div>

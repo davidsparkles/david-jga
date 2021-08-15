@@ -37,23 +37,23 @@ export interface Data {
   levels: Level[];
 }
 
-async function getData(): Promise<Data> {
-  const res = await fetch("/api/data");
+async function getData<T = Data>(path?: string): Promise<T> {
+  const res = await fetch(path ?? "/api/data");
   if (res.status === 200) return res.json();
   console.error(`Fetch error: ${res.status} ${res.statusText} ${res.text()}`);
   throw new Error(res.statusText);
 }
 
-export function useData(): { data?: Data; error?: any; loading: boolean; refetch: () => void } {
+export function useData<T = Data>(path?: string): { data?: T; error?: any; loading: boolean; refetch: () => void } {
   const [loading, setLoading] = useState<boolean>(false);
-  const [data, setData] = useState<Data | undefined>(undefined);
+  const [data, setData] = useState<T | undefined>(undefined);
   const [error, setError] = useState<any | undefined>(undefined);
 
   const refetch = useCallback(() => {
     (async () => {
       try {
         setLoading(true);
-        setData(await getData());
+        setData(await getData(path));
         setError(undefined);
       } catch (err) {
         console.log(err);
@@ -63,7 +63,7 @@ export function useData(): { data?: Data; error?: any; loading: boolean; refetch
         setLoading(false);
       }
     })();
-  }, []);
+  }, [path]);
 
   useEffect(refetch, [refetch]);
 

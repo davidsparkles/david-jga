@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Level } from "../api/useData";
-import { usePostLevels } from "../api/usePostLevels";
-import "./Levels.css";
+import { Level } from "../../api/useData";
+import { usePostLevels } from "../../api/usePostLevels";
+import "./styles.scss";
 
 export default function Levels(props: { levels: Level[] }): JSX.Element {
   const [values, setValues] = useState<number[]>([]);
@@ -27,22 +27,22 @@ export default function Levels(props: { levels: Level[] }): JSX.Element {
   const { loading, error, post } = usePostLevels();
 
   return (
-    <div className="levels">
+    <div className="levels-page">
       <h2>Levels</h2>
       {values.map((requiredXp, index) => (
-        <div className="levelsContainer">
-          <div className="levelIndex">{index + 1}</div>
-          <div className="levelXp">
+        <div className="level-container" key={index}>
+          <div className="level-index">{index + 1}</div>
+          <div className="level-xp">
             <input type="number" value={requiredXp} onChange={(evt) => changeElement(index, parseInt(evt.target.value, 10))} />
           </div>
-          <div className="levelDelete">
+          <div className="level-delete">
             <button onClick={() => deleteElement(index)}>Löschen</button>
           </div>
         </div>
       ))}
-      <button className="levelAdd" onClick={() => setValues([...values, values[values.length - 1] + 1])}>Neues Level</button>
+      <button className="level-add" onClick={() => setValues([...values, values[values.length - 1] + 1])}>Neues Level</button>
       <br />
-      <button className="levelsSave" onClick={() => post(values.map((value, index) => ({ id: index + 1, requiredXp: value })))}>Speichern</button>
+      <button className="levels-save" onClick={() => post(values.map((value, index) => ({ id: index + 1, requiredXp: value })))}>Speichern</button>
       {loading && <>loading...</>}
       {error && <>Error: {JSON.stringify(error)}</>}
     </div>

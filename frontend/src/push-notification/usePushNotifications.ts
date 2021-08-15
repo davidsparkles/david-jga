@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import http from "./utils/http";
+import http from "./http";
 
 // https://itnext.io/react-push-notifications-with-hooks-d293d36f4836
 // https://github.com/Spyna/push-notification-demo

@@ -1,5 +1,5 @@
 import React from "react";
-import { Data } from "../api/useData";
+import { Data } from "../../api/useData";
 import "./GameHeader.css";
 
 export default function GameHeader(props: { data?: Data }): JSX.Element {
