@@ -1,8 +1,25 @@
 .settings {
   padding-left: 8px;
 
-  .custom-notification {
-    margin-top: 8px;
+  .push-form {
+    margin-top: 20px;
+
+    .form-title {
+      margin: 12px 0;
+    }
+
+    .submit {
+      margin-top: 8px;
+
+      button {
+        color: white;
+        padding: 6px 12px;
+        font-size: 1.1em;
+        background-color: #348dfe;
+        border: 1px solid #348dfe;
+        border-radius: 5px;
+      }
+    }
   }
 
   .permission {
@@ -11,6 +28,10 @@
 
     &span {
       font-weight: bold;
+    }
+
+    .token {
+      margin: 8px 0;
     }
   }
 }

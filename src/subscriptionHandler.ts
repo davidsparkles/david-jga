@@ -72,20 +72,29 @@ async function getPushSubscriptions(): Promise<Array<{ id: string; pushSubscript
   return result;
 }
 
+interface PushPayload {
+  title: string;
+  text: string;
+  url: string;
+}
+
 export async function handleSendPushNotification(ctx: ParameterizedContext, next) {
   console.log("handleSendPushNotification");
-  const pushSubscriptions = await getPushSubscriptions() ;
-
-  console.log(`Send push to ${pushSubscriptions.length} subscriptions.`);
-  for (const sub of pushSubscriptions) {
-    try {
-      const res = await sendPushNotification(sub.pushSubscription);
-      console.log(`Success for ${sub.id}: ${res}`)
-    } catch (err) {
-      console.log(`Error for ${sub.id}: ${err.statusCode}, ${err}`)
-      if (err.statusCode === httpStatus.GONE) {
-        console.log(`Subscription ${sub.id} is gone and will be unsubscribed.`);
-        await unsubscribe(sub.id);
+  const payload = ctx.request?.body as any as PushPayload;
+  if (payload != null) {
+    const pushSubscriptions = await getPushSubscriptions();
+  
+    console.log(`Send push to ${pushSubscriptions.length} subscriptions.`);
+    for (const sub of pushSubscriptions) {
+      try {
+        const res = await sendPushNotification(sub.pushSubscription, payload);
+        console.log(`Success for ${sub.id}: ${res}`)
+      } catch (err) {
+        console.log(`Error for ${sub.id}: ${err.statusCode}, ${err}`)
+        if (err.statusCode === httpStatus.GONE) {
+          console.log(`Subscription ${sub.id} is gone and will be unsubscribed.`);
+          await unsubscribe(sub.id);
+        }
       }
     }
   }
@@ -95,20 +104,14 @@ export async function handleSendPushNotification(ctx: ParameterizedContext, next
   next();
 }
 
-async function sendPushNotification(pushSubscription: webpush.PushSubscription): Promise<webpush.SendResult> {
-  await timeout(5000);
-
-  const payload = {
-    title: "Level 10 erreicht",
-    text: "Bärenstark! David hat das nächste Level erreicht.",
-    // image: "/images/jason-leung-HM6TMmevbZQ-unsplash.jpg",
-    tag: "new-level",
-    url: "/rewards"
-  };
-
+async function sendPushNotification(pushSubscription: webpush.PushSubscription, payload: PushPayload): Promise<webpush.SendResult> {
   return webpush.sendNotification(
     pushSubscription,
-    JSON.stringify(payload)
+    JSON.stringify({
+      // image: "/images/jason-leung-HM6TMmevbZQ-unsplash.jpg",
+      tag: "new-level",
+      ...payload
+    })
   );
 }
 

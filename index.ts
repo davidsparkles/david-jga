@@ -47,7 +47,7 @@ router.post("/api/quest", crud.updateQuest);
 router.post("/api/levels", crud.updateLevels);
 
 router.post("/api/subscription", pushSubscription.handleSubscribe);
-router.get("/api/subscription", pushSubscription.handleSendPushNotification);
+router.post("/api/custom-subscription", pushSubscription.handleSendPushNotification);
 router.delete("/api/subscription/:id", pushSubscription.handleUnsubscribe);
 
 app.use(router.routes()).use(router.allowedMethods());

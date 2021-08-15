@@ -14,6 +14,12 @@ import {
 
 const pushNotificationSupported = isPushNotificationSupported();
 
+export interface PushPayload {
+  title: string;
+  text: string;
+  url: string;
+}
+
 export default function usePushNotifications() {
   const [userConsent, setUserConsent] = useState(Notification.permission);
   const [userSubscription, setUserSubscription] = useState<PushSubscription | null>(null);
@@ -92,11 +98,11 @@ export default function usePushNotifications() {
       });
   }, [userSubscription, userConsent, setLoading, setError, setPushServerSubscriptionId]);
 
-  const onClickSendNotification = useCallback(async () => {
+  const onClickSendNotification = useCallback(async (payload: PushPayload) => {
     setLoading(true);
     setError(false);
     await http
-      .get(`/api/subscription`)
+      .post(`/api/custom-subscription`, payload)
       .catch((err: any) => {
         setLoading(false);
         setError(err);

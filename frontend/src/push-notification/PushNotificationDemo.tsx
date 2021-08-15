@@ -19,7 +19,7 @@ export default function PushNotificationDemo() {
     onClickSusbribeToPushNotification,
     onClickSendSubscriptionToPushServer,
     pushServerSubscriptionId,
-    onClickSendNotification,
+    // onClickSendNotification,
     error,
     loading
   } = usePushNotifications();
@@ -53,7 +53,7 @@ export default function PushNotificationDemo() {
       {pushServerSubscriptionId && (
         <div>
           <p>The server accepted the push subscrption!</p>
-          <button onClick={onClickSendNotification}>Send a notification</button>
+          {/* <button onClick={onClickSendNotification}>Send a notification</button> */}
         </div>
       )}
 
