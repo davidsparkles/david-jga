@@ -9,6 +9,7 @@ import Levels from "../Levels";
 import Rewards from "../Rewards";
 import Settings from "../Settings";
 import "./styles.scss";
+import QuestDetails from "../QuestDetail";
 
 export default function Game(props: object): JSX.Element {
   const { data, error, loading, refetch } = useData();
@@ -40,8 +41,11 @@ export default function Game(props: object): JSX.Element {
                 <Route path="/levels" exact>
                   <Levels levels={data.levels} />
                 </Route>
-                <Route path="/quests">
+                <Route path="/quests" exact>
                   <Quests quests={data.quests} refetch={refetch} />
+                </Route>
+                <Route path="/quests/:id" exact>
+                  <QuestDetails />
                 </Route>
                 <Route path="/rewards">
                   <Rewards refetch={refetch} />

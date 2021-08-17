@@ -138,6 +138,47 @@ export async function getData(ctx: ParameterizedContext, next): Promise<void> {
   }
 }
 
+export async function getQuest(ctx: ParameterizedContext, next): Promise<void> {
+  const questId = ctx.params.id;
+  console.log("get quest", questId);
+  const client = await getClient();
+  try {
+    const res = await client.query(`
+      SELECT
+        *,
+        quest.max_xp AS "maxXp",
+        min_level AS "minLevel",
+        CASE
+          WHEN min_level > current_level() THEN 'hidden'
+          WHEN quest.xp IS NOT NULL THEN 'closed'
+          ELSE 'open'
+        END AS state,
+        COALESCE ((
+          SELECT json_agg(row_to_json(sub_version)) FROM (
+            SELECT * FROM quest_version WHERE quest_version.quest_id = quest.id ORDER BY created_at DESC
+          ) AS sub_version
+        ), '[]'::json) AS versions
+      FROM public.quest WHERE id = $1;
+    `, [questId]);
+  
+    const data = res?.rows?.[0];
+    if (data != null) {
+      ctx.status = httpStatus.OK;
+      ctx.body = data;
+    } else {
+      ctx.status = httpStatus.NOT_FOUND;
+      ctx.body = `Data Not Found`;
+    }
+  } catch (err) {
+    console.log("Postgres Client Error:", JSON.stringify(err));
+    ctx.status = httpStatus.INTERNAL_SERVER_ERROR;
+    ctx.body = "Internal Server Error - Postgres Client"
+  } finally {
+    client.release();
+    next();
+  }
+}
+
 export async function getRewards(ctx: ParameterizedContext, next): Promise<void> {
   const client = await getClient();
   try {

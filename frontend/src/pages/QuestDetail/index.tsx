@@ -1,9 +1,14 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { BiArrowBack } from "react-icons/bi";
-import { Quest } from "../../api/useData";
+import { useHistory, useParams } from "react-router-dom";
 import { usePostQuest } from "../../api/usePostQuest";
+import Error from "../../components/Error";
+import Loading from "../../components/Loading";
+import NoData from "../../components/NoData";
 import { useAppSelector } from "../../model/hooks";
 import { selectPermission } from "../../model/permissionReducer";
+import { useGetQuestQuery } from "../../model/services/quest";
+import "./styles.scss";
 
 interface Values {
   title: string;
@@ -15,8 +20,12 @@ interface Values {
   archived: boolean;
 }
 
-export default function QuestDetails(props: { quest: Quest; onBack: () => void }): JSX.Element {
-  const { quest, onBack } = props;
+const onBack = () => console.log("go back");
+
+export default function QuestDetails(props: object): JSX.Element {
+  const { id } = useParams<{ id: string }>();
+  const history = useHistory();
+  const { data: quest, error: errorGet, isLoading: isLoadingGet } = useGetQuestQuery(id); 
   const permission = useAppSelector(selectPermission);
 
   const [values, setValues] = useState<Values>({ title: "", description: "", maxXp: 0, minLevel: 0, xp: null, disabled: false, archived: false });
@@ -38,18 +47,26 @@ export default function QuestDetails(props: { quest: Quest; onBack: () => void }
   }, [quest]);
 
   const onSave = useCallback(async () => {
-    await post({ id: quest.id, ...values });
-    onBack();
-  }, [onBack, post, quest, values]);
+    if (quest != null) {
+      await post({ id: quest.id, ...values });
+      onBack();
+    }
+  }, [post, quest, values]);
 
   const onDelete = useCallback(async () => {
-    await post({ delete: true, id: quest.id });
-    onBack();
-  }, [onBack, post, quest]);
+    if (quest != null) {
+      await post({ delete: true, id: quest.id });
+      onBack();
+    }
+  }, [post, quest]);
+
+  if (quest == null) return <NoData />;
+  if (isLoadingGet) return <Loading />;
+  if (errorGet) return <Error error={errorGet} />
 
   return <div className="questDetails">
     <div className="backArrowContainer" >
-      <BiArrowBack className="backArrow" onClick={() => onBack()} />
+      <BiArrowBack className="backArrow" onClick={() => history.push("/quests")} />
       <div className="value">
         {
           permission === "edit"

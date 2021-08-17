@@ -1,10 +1,10 @@
 import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
 import Cookies from "js-cookie";
 import { Quest } from "../../api/useData";
 import { usePostQuest } from "../../api/usePostQuest";
 import { useAppSelector } from "../../model/hooks";
 import { selectPermission } from "../../model/permissionReducer";
-import QuestDetails from "./QuestDetails";
 import "./styles.scss";
 
 export default function Quests(props: { quests: Quest[]; refetch: () => void }): JSX.Element {
@@ -12,13 +12,10 @@ export default function Quests(props: { quests: Quest[]; refetch: () => void }):
 
   const [filterList, setFilterList] = useState<boolean>(Cookies.get("filterList") != null ? Cookies.get("filterList") === "true" : true);
   const [filterArchivedList, setFilterArchivedList] = useState<boolean>(Cookies.get("filterArchivedList") != null ? Cookies.get("filterArchivedList") === "true" : false);
-  const [selectedQuest, setSelectedQuest] = useState<Quest | null>(null);
 
   const { loading, error, post } = usePostQuest();
 
-  if (selectedQuest != null) {
-    return <QuestDetails quest={selectedQuest} onBack={() => { setSelectedQuest(null); props.refetch() }} />;
-  }
+  const history = useHistory();
 
   return (
     <>
@@ -45,10 +42,15 @@ export default function Quests(props: { quests: Quest[]; refetch: () => void }):
             <div
               key={index}
               className={`questBox ${quest.state} ${quest.disabled ? "disabled" : ""} ${quest.archived ? "archived" : ""}`}
-              onClick={() => !(permission === "none" && quest.state === "hidden") && setSelectedQuest(quest)}
+              onClick={() => {
+                if (!(permission === "none" && quest.state === "hidden")) history.push(`/quests/${quest.id}`);
+              }}
             >
               <div className="questHeader">
-                <div className="questTitle">{(permission === "none" && quest.state === "hidden") || quest.title == null ? "🔒 ???" : `${quest.state === "hidden" ? "🔒 " : ""}${quest.title}`}</div>
+                <div className="questTitle">
+                  {(permission === "none" && quest.state === "hidden") || quest.title == null ? "🔒 ???" : `${quest.state === "hidden" ? "🔒 " : ""}${quest.title}`}
+                  {permission === "edit" && <> ({quest.id})</>}
+                </div>
                 <div className="questPoints">
                   {
                     quest.state !== "closed" ? quest.maxXp : `${quest.xp} / ${quest.maxXp}`
