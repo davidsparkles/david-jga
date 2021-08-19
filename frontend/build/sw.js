@@ -10,8 +10,8 @@ function receivePushNotification(event) {
       vibrate: [200, 100, 200],
       tag: tag,
       image: image,
-      badge: "https://spyna.it/icons/favicon.ico",
-      actions: [{ action: "Detail", title: "View", icon: "https://via.placeholder.com/128/ff0000" }]
+      badge: image,
+      actions: [{ action: "Detail", title: "View", icon: image }]
     };
     event.waitUntil(self.registration.showNotification(title, options));
   }
