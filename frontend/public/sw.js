@@ -10,8 +10,8 @@ function receivePushNotification(event) {
       vibrate: [200, 100, 200],
       tag: tag,
       image: image,
-      badge: image,
-      actions: [{ action: "Detail", title: "View", icon: image }]
+      badge: "/trophy.png",
+      actions: [{ action: "Detail", title: "View", icon: "/trophy.png" }]
     };
     event.waitUntil(self.registration.showNotification(title, options));
   }
