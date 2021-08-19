@@ -108,7 +108,7 @@ async function sendPushNotification(pushSubscription: webpush.PushSubscription, 
   return webpush.sendNotification(
     pushSubscription,
     JSON.stringify({
-      // image: "/images/jason-leung-HM6TMmevbZQ-unsplash.jpg",
+      image: "/trophy.png",
       tag: "new-level",
       ...payload
     })

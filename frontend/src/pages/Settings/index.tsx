@@ -1,6 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import { MdSend } from "react-icons/md";
+import { VscLoading } from "react-icons/vsc";
 import { useAppSelector, useAppDispatch } from "../../model/hooks";
 import { selectToken, selectPermission, changeToken } from "../../model/permissionReducer";
 import { PushPayload } from "../../push-notification/usePushNotifications";
@@ -30,7 +31,6 @@ export default function Settings(props: {
           await props.onClickAskUserPermission();
           await props.onClickSusbribeToPushNotification();
         }} />Benachrichtigungen erlauben
-        <Loading loading={props.loading} />
         <Error error={props.error} />
         {
           permission === "edit" && (
@@ -49,7 +49,7 @@ export default function Settings(props: {
                 <input value={url} onChange={(evt) => setUrl(evt.target.value ?? "")} />
               </div>
               <div className="submit">
-                <button onClick={() => props.onClickSendNotification({ title, text, url })}>Senden <MdSend /></button>
+                <button onClick={() => props.onClickSendNotification({ title, text, url })}>Senden <MdSend /> {props.loading && <VscLoading />}</button>
               </div>
             </div>
           )
@@ -66,7 +66,6 @@ export default function Settings(props: {
   )
 }
 
-const Loading = ({ loading }: { loading: boolean }) => loading ? <span>Laden ...</span> : null;
 const Error = ({ error }: { error: any }) =>
   error ? (
     <section className="app-error">
