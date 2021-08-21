@@ -9,4 +9,10 @@
     grid-column-gap: 1em;
     margin: 8px 0;
   }
+
+  .level-button-container {
+    display: grid;
+    grid-template-columns: auto auto;
+    column-gap: 1em;
+  }
 }

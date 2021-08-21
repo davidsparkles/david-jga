@@ -1,7 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import { MdSend } from "react-icons/md";
-import { VscLoading } from "react-icons/vsc";
+import Button from "../../components/Button";
 import { useAppSelector, useAppDispatch } from "../../model/hooks";
 import { selectToken, selectPermission, changeToken } from "../../model/permissionReducer";
 import { PushPayload } from "../../push-notification/usePushNotifications";
@@ -49,7 +49,9 @@ export default function Settings(props: {
                 <input value={url} onChange={(evt) => setUrl(evt.target.value ?? "")} />
               </div>
               <div className="submit">
-                <button onClick={() => props.onClickSendNotification({ title, text, url })}>Senden <MdSend /> {props.loading && <VscLoading />}</button>
+                <Button onClick={() => props.onClickSendNotification({ title, text, url })} loading={props.loading}>
+                  <>Senden <MdSend /></>
+                </Button>
               </div>
             </div>
           )

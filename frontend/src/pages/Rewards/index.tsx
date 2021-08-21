@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import Loading from "../../components/Loading";
 import NoData from "../../components/NoData";
@@ -8,7 +8,9 @@ import "./styles.scss";
 
 export default function Rewards(props: { refetch: () => void }): JSX.Element {
   const permission = useSelector(selectPermission);
-  const { data, error, isLoading } = useGetRewardsQuery(undefined);
+  const { data, error, isLoading, refetch } = useGetRewardsQuery(undefined);
+
+  useEffect(() => refetch(), [refetch]);
 
   return (
     <div className="rewards">

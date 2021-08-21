@@ -1,0 +1,28 @@
+button.qm-button {
+  color: white;
+  padding: 6px 12px;
+  font-size: 1.1em;
+  background-color: #348dfe;
+  border: 1px solid #348dfe;
+  border-radius: 5px;
+  text-shadow: 0 -1px 0 rgba(0,0,0,.12);
+  box-shadow: 0 2px #0000000b;
+  cursor: pointer;
+
+  &.qm-button-disabled {
+    opacity: 0.6;
+    pointer-events: none;
+  }
+
+  &.qm-button-loading {
+    .qm-loading-icon {
+      animation:spin 4s linear infinite;
+      @keyframes spin {
+        100% {
+          -webkit-transform: rotate(360deg);
+          transform:rotate(360deg);
+        }
+      }
+    }
+  }
+}

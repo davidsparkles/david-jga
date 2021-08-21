@@ -1,7 +1,9 @@
 import React, { useCallback, useEffect, useState } from "react";
+import { AiFillDelete } from "react-icons/ai";
 import { BiArrowBack } from "react-icons/bi";
 import { useHistory, useParams } from "react-router-dom";
 import { usePostQuest } from "../../api/usePostQuest";
+import Button from "../../components/Button";
 import Error from "../../components/Error";
 import Loading from "../../components/Loading";
 import NoData from "../../components/NoData";
@@ -20,17 +22,19 @@ interface Values {
   archived: boolean;
 }
 
-const onBack = () => console.log("go back");
-
 export default function QuestDetails(props: object): JSX.Element {
   const { id } = useParams<{ id: string }>();
   const history = useHistory();
-  const { data: quest, error: errorGet, isLoading: isLoadingGet } = useGetQuestQuery(id); 
+  const { data: quest, error: errorGet, isLoading: isLoadingGet, refetch } = useGetQuestQuery(id); 
   const permission = useAppSelector(selectPermission);
 
   const [values, setValues] = useState<Values>({ title: "", description: "", maxXp: 0, minLevel: 0, xp: null, disabled: false, archived: false });
 
   const { loading, error, post } = usePostQuest();
+
+  useEffect(() => {
+    refetch();
+  }, [refetch]);
 
   useEffect(() => {
     if (quest != null) {
@@ -49,16 +53,16 @@ export default function QuestDetails(props: object): JSX.Element {
   const onSave = useCallback(async () => {
     if (quest != null) {
       await post({ id: quest.id, ...values });
-      onBack();
+      history.push("/quests");
     }
-  }, [post, quest, values]);
+  }, [post, quest, values, history]);
 
   const onDelete = useCallback(async () => {
     if (quest != null) {
       await post({ delete: true, id: quest.id });
-      onBack();
+      history.push("/quests");
     }
-  }, [post, quest]);
+  }, [post, quest, history]);
 
   if (quest == null) return <NoData />;
   if (isLoadingGet) return <Loading />;
@@ -120,10 +124,15 @@ export default function QuestDetails(props: object): JSX.Element {
       {
         permission === "edit"
         ?
-        (<input type="number" value={values.xp ?? "-"} onChange={(evt) => {
-          const xp = parseInt(evt.target.value, 10);
-          setValues({ ...values, xp: xp < 0 ? null : xp })
-        }} />)
+        (
+          <>
+            <input type="number" value={values.xp ?? "-"} onChange={(evt) => {
+              const xp = parseInt(evt.target.value, 10);
+              setValues({ ...values, xp })
+            }} />
+            <Button onClick={() => setValues({ ...values, xp: null })}><AiFillDelete /></Button>
+          </>
+        )
         :
         quest.state !== "closed" ? "-" : quest.xp
       }
@@ -144,9 +153,9 @@ export default function QuestDetails(props: object): JSX.Element {
             <input type="checkbox" checked={values.archived} onChange={(evt) => setValues({ ...values, archived: evt.target.checked })} />
           </div>
         <div className="buttonContainer">
-          <div className="saveContainer">
-            <button onClick={onSave}>Speichern</button>
-          </div>
+          <Button loading={loading} onClick={onSave}>
+            Speichern
+          </Button>
           {quest.archived && (
             <div className="deleteContainer">
               <button onClick={onDelete}>Quest löschen</button>

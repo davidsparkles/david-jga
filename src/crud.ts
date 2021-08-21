@@ -113,7 +113,7 @@ export async function getData(ctx: ParameterizedContext, next): Promise<void> {
         FROM (
           SELECT max(level.id) AS current_level, COALESCE(xps.sum, 0) AS current_xp
           FROM level
-            LEFT JOIN LATERAL (SELECT sum(COALESCE(xp, 0)) FROM quest WHERE archived != TRUE) xps ON TRUE
+            LEFT JOIN LATERAL (SELECT CASE WHEN sum(COALESCE(xp, 0)) < 0 THEN 0 ELSE sum(COALESCE(xp, 0)) END FROM quest WHERE archived != TRUE) xps ON TRUE
           WHERE COALESCE(xps.sum, 0) >= level.required_xp
           GROUP BY COALESCE(xps.sum, 0)
         ) game_level
@@ -183,7 +183,7 @@ export async function getRewards(ctx: ParameterizedContext, next): Promise<void>
   const client = await getClient();
   try {
     const res = await client.query(`
-      SELECT *, min_level AS "minLevel", current_level() < min_level AS "locked" FROM public.reward;
+      SELECT *, min_level AS "minLevel", current_level() < min_level AS "locked" FROM public.reward ORDER BY min_level ASC;
     `, []);
   
     const data = res?.rows;

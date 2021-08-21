@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { Level } from "../../api/useData";
 import { usePostLevels } from "../../api/usePostLevels";
+import Button from "../../components/Button";
 import "./styles.scss";
 
 export default function Levels(props: { levels: Level[] }): JSX.Element {
@@ -40,9 +41,10 @@ export default function Levels(props: { levels: Level[] }): JSX.Element {
           </div>
         </div>
       ))}
-      <button className="level-add" onClick={() => setValues([...values, values[values.length - 1] + 1])}>Neues Level</button>
-      <br />
-      <button className="levels-save" onClick={() => post(values.map((value, index) => ({ id: index + 1, requiredXp: value })))}>Speichern</button>
+      <div className="level-button-container">
+        <Button onClick={() => setValues([...values, values[values.length - 1] + 1])} loading={loading}>Neues Level</Button>
+        <Button onClick={() => post(values.map((value, index) => ({ id: index + 1, requiredXp: value })))} loading={loading}>Speichern</Button>
+      </div>
       {loading && <>loading...</>}
       {error && <>Error: {JSON.stringify(error)}</>}
     </div>

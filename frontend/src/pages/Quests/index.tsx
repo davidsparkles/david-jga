@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import Cookies from "js-cookie";
 import { Quest } from "../../api/useData";
@@ -8,6 +8,7 @@ import { selectPermission } from "../../model/permissionReducer";
 import "./styles.scss";
 
 export default function Quests(props: { quests: Quest[]; refetch: () => void }): JSX.Element {
+  const { quests, refetch } = props;
   const permission = useAppSelector(selectPermission);
 
   const [filterList, setFilterList] = useState<boolean>(Cookies.get("filterList") != null ? Cookies.get("filterList") === "true" : true);
@@ -16,6 +17,8 @@ export default function Quests(props: { quests: Quest[]; refetch: () => void }):
   const { loading, error, post } = usePostQuest();
 
   const history = useHistory();
+
+  useEffect(() => refetch(), [refetch]);
 
   return (
     <>
@@ -34,7 +37,7 @@ export default function Quests(props: { quests: Quest[]; refetch: () => void }):
             }} />Archivierte Quests
           </div>
         )}
-        {props.quests
+        {quests
           .filter(({ state }) => filterList === true ? true : state !== "closed")
           .filter(({ archived }) => filterArchivedList === true ? true : archived === false)
           .filter(({ archived, disabled }) => (archived === false && disabled === false) || permission === "edit")
