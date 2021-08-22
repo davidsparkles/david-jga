@@ -7,6 +7,7 @@ export interface Reward {
   minLevel: string;
   disabled: boolean;
   locked: boolean;
+  img?: string;
 }
 
 export const rewardsApi = createApi({
@@ -15,8 +16,11 @@ export const rewardsApi = createApi({
   endpoints: (builder) => ({
     getRewards: builder.query<Reward[], undefined>({
       query: () => "rewards"
+    }),
+    getReward: builder.query<Reward, string>({
+      query: (arg) => `rewards/${arg}`
     })
   })
 });
 
-export const { useGetRewardsQuery } = rewardsApi;
+export const { useGetRewardsQuery, useGetRewardQuery } = rewardsApi;
