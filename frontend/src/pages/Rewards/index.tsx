@@ -5,12 +5,15 @@ import NoData from "../../components/NoData";
 import { useGetRewardsQuery } from "../../model/services/rewards";
 import { selectPermission } from "../../model/permissionReducer";
 import "./styles.scss";
+import { useHistory } from "react-router-dom";
 
 export default function Rewards(props: { refetch: () => void }): JSX.Element {
   const permission = useSelector(selectPermission);
   const { data, error, isLoading, refetch } = useGetRewardsQuery(undefined);
 
   useEffect(() => refetch(), [refetch]);
+
+  const history = useHistory();
 
   return (
     <div className="rewards">
@@ -21,8 +24,13 @@ export default function Rewards(props: { refetch: () => void }): JSX.Element {
         data != null && data.length > 0 ? (
           <ul className="rewards-list">
             {
-              data?.map((item, index) => (
-                <li key={index} className={`reward-item ${item.disabled === true ? "disabled" : "enabled"} ${item.locked === true ? "locked" : "unlocked"}`}>
+              data?.filter((item) => !(item.locked && permission === "none"))
+                .filter((item) => !item.disabled || permission === "edit")
+                .map((item, index) => (
+                <li
+                  key={index} className={`reward-item ${item.disabled === true ? "disabled" : "enabled"} ${item.locked === true ? "locked" : "unlocked"}`}
+                  onClick={() => history.push(`/rewards/${item.id}`)}
+                >
                   <div className="title">
                     {item.title}{permission === "edit" && <> ({item.id})</>}
                   </div>

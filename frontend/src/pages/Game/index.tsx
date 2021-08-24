@@ -5,11 +5,13 @@ import GameHeader from "./GameHeader";
 import GameFooter from "./GameFooter";
 import usePushNotifications from "../../push-notification/usePushNotifications";
 import Quests from "../Quests";
+import QuestDetail from "../QuestDetail";
 import Levels from "../Levels";
 import Rewards from "../Rewards";
+import RewardDetail from "../RewardDetail";
+import RewardEdit from "../RewardEdit";
 import Settings from "../Settings";
 import "./styles.scss";
-import QuestDetails from "../QuestDetail";
 
 export default function Game(props: object): JSX.Element {
   const { data, error, loading, refetch } = useData();
@@ -45,10 +47,16 @@ export default function Game(props: object): JSX.Element {
                   <Quests quests={data.quests} refetch={refetch} />
                 </Route>
                 <Route path="/quests/:id" exact>
-                  <QuestDetails />
+                  <QuestDetail />
                 </Route>
-                <Route path="/rewards">
+                <Route path="/rewards" exact>
                   <Rewards refetch={refetch} />
+                </Route>
+                <Route path="/rewards/:id" exact>
+                  <RewardDetail />
+                </Route>
+                <Route path="/rewards/:id/edit" exact>
+                  <RewardEdit />
                 </Route>
                 <Route path="/settings">
                   <Settings

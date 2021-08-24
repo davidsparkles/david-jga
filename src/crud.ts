@@ -212,7 +212,7 @@ export async function getReward(ctx: ParameterizedContext, next): Promise<void> 
       SELECT *, min_level AS "minLevel", current_level() < min_level AS "locked" FROM public.reward WHERE id = $1;
     `, [rewardId]);
   
-    const data = res?.rows;
+    const data = res?.rows?.[0];
     if (data != null) {
       ctx.status = httpStatus.OK;
       ctx.body = data;
@@ -220,6 +220,30 @@ export async function getReward(ctx: ParameterizedContext, next): Promise<void> 
       ctx.status = httpStatus.NOT_FOUND;
       ctx.body = `Data Not Found`;
     }
+  } catch (err) {
+    console.log("Postgres Client Error:", JSON.stringify(err));
+    ctx.status = httpStatus.INTERNAL_SERVER_ERROR;
+    ctx.body = "Internal Server Error - Postgres Client"
+  } finally {
+    client.release();
+    next();
+  }
+}
+
+export async function updateReward(ctx: ParameterizedContext, next): Promise<void> {
+  const rewardId = ctx.params.id;
+  const values = ctx.request.body as any;
+  console.log("Received values: ", JSON.stringify(values));
+
+  const client = await getClient();
+  try {
+    if (values.title) await client.query(`UPDATE reward SET title = $2 WHERE id = $1;`, [rewardId, values.title]);
+    if (values.description) await client.query(`UPDATE reward SET description = $2 WHERE id = $1;`, [rewardId, values.description]);
+    if (values.minLevel) await client.query(`UPDATE reward SET min_level = $2 WHERE id = $1;`, [rewardId, values.minLevel]);
+    if (values.disabled) await client.query(`UPDATE reward SET disabled = $2 WHERE id = $1;`, [rewardId, values.disabled]);
+    if (values.img) await client.query(`UPDATE reward SET img = $2 WHERE id = $1;`, [rewardId, values.img]);
+
+    ctx.status = httpStatus.ACCEPTED;
   } catch (err) {
     console.log("Postgres Client Error:", JSON.stringify(err));
     ctx.status = httpStatus.INTERNAL_SERVER_ERROR;
