@@ -35,10 +35,10 @@ export default function Rewards(props: { refetch: () => void }): JSX.Element {
                   }}
                 >
                   <div className="title">
-                    {item.locked && permission === "none" ? "???" : item.title}{permission === "edit" && <> ({item.id})</>}
+                    {item.locked && permission === "none" ? "🔒 ???" : item.title}{permission === "edit" && <> ({item.id})</>}
                   </div>
                   <div className="description">
-                    {item.locked && permission === "none" ? "???" : item.description}
+                    {item.locked && permission === "none" ? "" : item.description}
                   </div>
                   <div className="min-level">
                     Ab Level {item.minLevel}
