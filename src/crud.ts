@@ -240,10 +240,26 @@ export async function updateReward(ctx: ParameterizedContext, next): Promise<voi
     if (values.title) await client.query(`UPDATE reward SET title = $2 WHERE id = $1;`, [rewardId, values.title]);
     if (values.description) await client.query(`UPDATE reward SET description = $2 WHERE id = $1;`, [rewardId, values.description]);
     if (values.minLevel) await client.query(`UPDATE reward SET min_level = $2 WHERE id = $1;`, [rewardId, values.minLevel]);
-    if (values.disabled) await client.query(`UPDATE reward SET disabled = $2 WHERE id = $1;`, [rewardId, values.disabled]);
+    if (values.disabled != null) await client.query(`UPDATE reward SET disabled = $2 WHERE id = $1;`, [rewardId, values.disabled]);
     if (values.img) await client.query(`UPDATE reward SET img = $2 WHERE id = $1;`, [rewardId, values.img]);
 
     ctx.status = httpStatus.ACCEPTED;
+  } catch (err) {
+    console.log("Postgres Client Error:", JSON.stringify(err));
+    ctx.status = httpStatus.INTERNAL_SERVER_ERROR;
+    ctx.body = "Internal Server Error - Postgres Client"
+  } finally {
+    client.release();
+    next();
+  }
+}
+
+export async function createReward(ctx: ParameterizedContext, next): Promise<void> {
+  const client = await getClient();
+  try {
+    await client.query(`INSERT INTO reward(title, description, min_level, disabled) VALUES ('New Reward', '', 21, TRUE);`, []);
+
+    ctx.status = httpStatus.CREATED;
   } catch (err) {
     console.log("Postgres Client Error:", JSON.stringify(err));
     ctx.status = httpStatus.INTERNAL_SERVER_ERROR;

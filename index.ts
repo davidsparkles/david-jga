@@ -44,6 +44,7 @@ const router = new Router();
 router.get("/api/data", crud.getData);
 router.get("/api/quests/:id", crud.getQuest);
 router.get("/api/rewards", crud.getRewards);
+router.post("/api/rewards", crud.createReward);
 router.get("/api/rewards/:id", crud.getReward);
 router.patch("/api/rewards/:id", crud.updateReward);
 router.post("/api/quest", crud.updateQuest);

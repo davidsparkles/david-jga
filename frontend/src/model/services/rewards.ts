@@ -21,8 +21,14 @@ export const rewardsApi = createApi({
     getReward: build.query<Reward, string>({
       query: (arg) => `rewards/${arg}`
     }),
+    createReward: build.mutation<undefined, undefined>({
+      query: () => ({
+        url: "rewards",
+        method: 'POST',
+      }),
+      invalidatesTags: ["Reward"],
+    }),
     updateReward: build.mutation<undefined, Partial<Reward> & Pick<Reward, 'id'>>({
-      // note: an optional `queryFn` may be used in place of `query`
       query: ({ id, ...patch }) => ({
         url: `rewards/${id}`,
         method: 'PATCH',
@@ -33,4 +39,4 @@ export const rewardsApi = createApi({
   })
 });
 
-export const { useGetRewardsQuery, useGetRewardQuery, useUpdateRewardMutation } = rewardsApi;
+export const { useGetRewardsQuery, useGetRewardQuery, useCreateRewardMutation, useUpdateRewardMutation } = rewardsApi;

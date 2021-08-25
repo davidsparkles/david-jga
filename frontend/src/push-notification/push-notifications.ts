@@ -29,7 +29,7 @@ function sendNotification() {
     badge: "https://spyna.it/icons/android-icon-192x192.png",
     actions: [{ action: "Detail", title: "View", icon: "https://via.placeholder.com/128/ff0000" }]
   };
-  navigator.serviceWorker.ready.then(function(serviceWorker) {
+  navigator?.serviceWorker?.ready.then(function(serviceWorker) {
     serviceWorker.showNotification(title, options);
   });
 }
@@ -38,7 +38,7 @@ function sendNotification() {
  *
  */
 function registerServiceWorker() {
-  return navigator.serviceWorker.register("/sw.js");
+  return navigator?.serviceWorker?.register("/sw.js");
 }
 
 /**
@@ -48,7 +48,7 @@ function registerServiceWorker() {
  */
 async function createNotificationSubscription() {
   //wait for service worker installation to be ready
-  const serviceWorker = await navigator.serviceWorker.ready;
+  const serviceWorker = await navigator?.serviceWorker?.ready;
   // subscribe and return the subscription
   return await serviceWorker.pushManager.subscribe({
     userVisibleOnly: true,
@@ -61,7 +61,7 @@ async function createNotificationSubscription() {
  */
 function getUserSubscription(): Promise<PushSubscription | null> {
   //wait for service worker installation to be ready, and then
-  return navigator.serviceWorker.ready
+  return navigator?.serviceWorker?.ready
     .then(function(serviceWorker) {
       return serviceWorker.pushManager.getSubscription();
     })
